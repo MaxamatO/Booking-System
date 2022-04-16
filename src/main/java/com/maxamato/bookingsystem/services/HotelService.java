@@ -1,5 +1,6 @@
 package com.maxamato.bookingsystem.services;
 
+import com.maxamato.bookingsystem.dtos.HotelRoomDto;
 import com.maxamato.bookingsystem.entities.Hotel;
 import com.maxamato.bookingsystem.entities.HotelRoom;
 import com.maxamato.bookingsystem.entities.requests.HotelRequest;
@@ -61,5 +62,9 @@ public class HotelService {
         hotelRepository.executeUpdate();
 
 
+    }
+
+    public List<HotelRoom> getAllHotelRooms() {
+        return hotelRoomRepository.findAll();
     }
 }

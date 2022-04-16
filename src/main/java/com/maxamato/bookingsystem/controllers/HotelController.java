@@ -1,6 +1,8 @@
 package com.maxamato.bookingsystem.controllers;
 
 import com.maxamato.bookingsystem.dtos.HotelDto;
+import com.maxamato.bookingsystem.dtos.HotelRoomDto;
+import com.maxamato.bookingsystem.entities.HotelRoom;
 import com.maxamato.bookingsystem.entities.requests.HotelRequest;
 import com.maxamato.bookingsystem.entities.requests.HotelRoomRequest;
 import com.maxamato.bookingsystem.services.HotelService;
@@ -42,6 +44,11 @@ public class HotelController {
     public String addHotelRoom(@RequestBody HotelRoomRequest hotelRoomRequest){
         hotelService.addHotelRoom(hotelRoomRequest);
         return "added";
+    }
+
+    @GetMapping("hotel/rooms/all")
+    public List<HotelRoom> getAllHotelRooms(){
+        return hotelService.getAllHotelRooms();
     }
 
 }
