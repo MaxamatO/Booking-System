@@ -1,0 +1,8 @@
+Booking System for hotels.
+
+Account: first name, last name, email, password, *payments credentials, *address
+
+List of 10 hotels: #rooms, #people, price, benefits(private toilet, pets allowed, breakfast),
+stars, name, city, country, address
+
+*optional
