@@ -10,6 +10,7 @@ import org.springframework.lang.Nullable;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 
 
 @NoArgsConstructor
@@ -19,6 +20,9 @@ import java.util.List;
 @Entity
 @Table(name = "hotels")
 public class Hotel {
+    public enum Stars{
+        ONE, TWO, THREE, FOUR, FIVE
+    }
 
     @Id
     @GeneratedValue(
@@ -29,14 +33,14 @@ public class Hotel {
     private String hotelName;
     private String city;
     private String country;
-    private Integer stars;
+    private Stars stars;
     private Integer numberOfRooms;
 
 
     @Column(name = "is_available_on_summer", columnDefinition = "boolean default true")
     private Boolean isAvailableOnSummer=true;
 
-    public Hotel(String hotelName, String city, String country,int stars) {
+    public Hotel(String hotelName, String city, String country,Stars stars) {
         this.hotelName = hotelName;
         this.city = city;
         this.country = country;
