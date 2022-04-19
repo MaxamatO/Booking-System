@@ -2,7 +2,9 @@ package com.maxamato.bookingsystem.controllers;
 
 import com.maxamato.bookingsystem.dtos.HotelDto;
 import com.maxamato.bookingsystem.dtos.HotelRoomDto;
+import com.maxamato.bookingsystem.entities.Hotel;
 import com.maxamato.bookingsystem.entities.HotelRoom;
+import com.maxamato.bookingsystem.entities.requests.ClientRequest;
 import com.maxamato.bookingsystem.entities.requests.HotelRequest;
 import com.maxamato.bookingsystem.entities.requests.HotelRoomRequest;
 import com.maxamato.bookingsystem.services.HotelService;
@@ -50,5 +52,8 @@ public class HotelController {
     public List<HotelRoom> getAllHotelRooms(){
         return hotelService.getAllHotelRooms();
     }
+
+    // ********* Client Part ********
+
 
 }
