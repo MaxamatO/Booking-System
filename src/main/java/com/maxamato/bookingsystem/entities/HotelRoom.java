@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -26,6 +28,8 @@ public class HotelRoom {
     @NotNull
     private Hotel hotel;
 
+    @ManyToMany(mappedBy = "bookedRooms")
+    private Set<Client> clients = new HashSet<>();
 
     private int numberOfClients=0;
 
