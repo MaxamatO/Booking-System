@@ -1,5 +1,6 @@
 package com.maxamato.bookingsystem.entities;
 
+import com.sun.istack.NotNull;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,30 +21,29 @@ import java.util.Stack;
 @Entity
 @Table(name = "hotels")
 public class Hotel {
-    public enum Stars{
-        ONE, TWO, THREE, FOUR, FIVE
-    }
 
     @Id
     @GeneratedValue(
             strategy = GenerationType.IDENTITY
     )
     private Long hotelId;
-
     private String hotelName;
     private String city;
     private String country;
-    private Stars stars;
-    private Integer numberOfRooms;
+    private Integer stars;
 
+    @Column(name = "number_of_rooms", columnDefinition = "integer default 0")
+    private Integer numberOfRooms=0;
 
     @Column(name = "is_available_on_summer", columnDefinition = "boolean default true")
     private Boolean isAvailableOnSummer=true;
 
-    public Hotel(String hotelName, String city, String country,Stars stars) {
+
+    public Hotel(String hotelName, String city, String country,Integer stars) {
         this.hotelName = hotelName;
         this.city = city;
         this.country = country;
         this.stars = stars;
     }
+
 }
