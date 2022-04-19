@@ -13,6 +13,6 @@ public class HotelRequest {
     private final String hotelName;
     private final String city;
     private final String country;
-    private final Hotel.Stars stars;
+    private final Integer stars;
 
 }
