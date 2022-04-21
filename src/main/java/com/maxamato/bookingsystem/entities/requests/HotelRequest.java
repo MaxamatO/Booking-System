@@ -14,5 +14,6 @@ public class HotelRequest {
     private final String city;
     private final String country;
     private final Integer stars;
+    private Boolean isAvailableOnSummer;
 
 }
