@@ -1,9 +1,11 @@
 package com.maxamato.bookingsystem.controllers;
 
+import com.maxamato.bookingsystem.entities.Client;
 import com.maxamato.bookingsystem.entities.requests.ClientRequest;
 import com.maxamato.bookingsystem.services.ClientService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -14,8 +16,7 @@ public class ClientController {
     private final ClientService clientService;
 
     @PostMapping
-    private String addClient(ClientRequest clientRequest){
-        clientService.addClient(clientRequest);
-        return "added";
+    public Client addClient(@RequestBody ClientRequest clientRequest) {
+        return clientService.addClient(clientRequest);
     }
 }

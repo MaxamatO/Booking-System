@@ -1,15 +1,14 @@
 package com.maxamato.bookingsystem.entities.requests;
 
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.ToString;
+import lombok.*;
 
 import java.time.LocalDate;
 
-@AllArgsConstructor
 @Getter
+@Setter
+@AllArgsConstructor
 @EqualsAndHashCode
+@ToString
 public class ClientRequest {
 
     private final String email;

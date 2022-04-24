@@ -28,8 +28,8 @@ public class HotelRoom {
     @NotNull
     private Hotel hotel;
 
-    @ManyToMany(mappedBy = "bookedRooms")
-    private Set<Client> clients = new HashSet<>();
+//    @ManyToMany(mappedBy = "bookedRooms")
+//    private Set<Client> clients = new HashSet<>();
 
     private int numberOfClients=0;
 

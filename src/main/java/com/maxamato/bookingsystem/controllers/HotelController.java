@@ -7,6 +7,7 @@ import com.maxamato.bookingsystem.entities.HotelRoom;
 import com.maxamato.bookingsystem.entities.requests.ClientRequest;
 import com.maxamato.bookingsystem.entities.requests.HotelRequest;
 import com.maxamato.bookingsystem.entities.requests.HotelRoomRequest;
+import com.maxamato.bookingsystem.services.ClientService;
 import com.maxamato.bookingsystem.services.HotelService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +21,6 @@ import java.util.stream.Collectors;
 public class HotelController {
 
     private final HotelService hotelService;
-
     // ****** HOTEL PART *******
 
     @PostMapping(path = "hotel/add")
@@ -52,8 +52,5 @@ public class HotelController {
     public List<HotelRoom> getAllHotelRooms(){
         return hotelService.getAllHotelRooms();
     }
-
-    // ********* Client Part ********
-
 
 }
