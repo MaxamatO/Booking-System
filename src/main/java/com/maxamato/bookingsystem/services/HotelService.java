@@ -1,9 +1,12 @@
 package com.maxamato.bookingsystem.services;
 
+import com.maxamato.bookingsystem.entities.Client;
 import com.maxamato.bookingsystem.entities.Hotel;
 import com.maxamato.bookingsystem.entities.HotelRoom;
+import com.maxamato.bookingsystem.entities.requests.ClientRequest;
 import com.maxamato.bookingsystem.entities.requests.HotelRequest;
 import com.maxamato.bookingsystem.entities.requests.HotelRoomRequest;
+import com.maxamato.bookingsystem.repository.ClientRepository;
 import com.maxamato.bookingsystem.repository.HotelRepository;
 import com.maxamato.bookingsystem.repository.HotelRoomRepository;
 import lombok.AllArgsConstructor;
@@ -23,13 +26,15 @@ public class HotelService {
 
     private final HotelRepository hotelRepository;
     private final HotelRoomRepository hotelRoomRepository;
+    private final ClientRepository clientRepository;
 
     public String addHotel(HotelRequest hotel){
         hotelRepository.save(new Hotel(
                 hotel.getHotelName(),
                 hotel.getCity(),
                 hotel.getCountry(),
-                hotel.getStars()
+                hotel.getStars(),
+                hotel.getIsAvailableOnSummer()
 
         ));
         return "added";
@@ -63,4 +68,6 @@ public class HotelService {
     public List<HotelRoom> getAllHotelRooms() {
         return hotelRoomRepository.findAll();
     }
+
+
 }

@@ -14,7 +14,7 @@ import java.util.Set;
 @Entity
 @Setter
 @Getter
-@AllArgsConstructor
+@NoArgsConstructor
 @EqualsAndHashCode
 public class Client {
 
@@ -33,13 +33,13 @@ public class Client {
     private final boolean isAdult= Period.between(dateOfBirth, LocalDate.now())
             .getYears()>=18;
 
-    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    @JoinTable(
-            name = "clients_rooms",
-            joinColumns = @JoinColumn(name = "client_id"),
-            inverseJoinColumns = @JoinColumn(name = "hotel_room_id")
-    )
-    private final Set<HotelRoom> bookedRooms = new HashSet<>();
+//    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+//    @JoinTable(
+//            name = "clients_rooms",
+//            joinColumns = @JoinColumn(name = "client_id"),
+//            inverseJoinColumns = @JoinColumn(name = "hotel_room_id")
+//    )
+//    private final Set<HotelRoom> bookedRooms = new HashSet<>();
 
     public Client(String email, String password, LocalDate dateOfBirth) {
         this.email = email;
