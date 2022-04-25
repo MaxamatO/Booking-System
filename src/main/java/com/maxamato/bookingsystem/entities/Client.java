@@ -7,6 +7,7 @@ import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Period;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -30,21 +31,30 @@ public class Client {
 
     private LocalDateTime accountCreatedAt=LocalDateTime.now();
 
-    private final boolean isAdult= Period.between(dateOfBirth, LocalDate.now())
-            .getYears()>=18;
+    private boolean isAdult;
 
-//    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-//    @JoinTable(
-//            name = "clients_rooms",
-//            joinColumns = @JoinColumn(name = "client_id"),
-//            inverseJoinColumns = @JoinColumn(name = "hotel_room_id")
-//    )
-//    private final Set<HotelRoom> bookedRooms = new HashSet<>();
+    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @JoinTable(
+            name = "clients_rooms",
+            joinColumns = @JoinColumn(name = "client_id"),
+            inverseJoinColumns = @JoinColumn(name = "hotel_room_id")
+    )
+    private final List<HotelRoom> bookedRooms = new ArrayList<>();
 
     public Client(String email, String password, LocalDate dateOfBirth) {
         this.email = email;
         this.password = password;
         this.dateOfBirth = dateOfBirth;
+        this.isAdult = Period.between(dateOfBirth, LocalDate.now())
+                .getYears()>=18;
+    }
+    public Client(String email, String password, LocalDate dateOfBirth, HotelRoom hotelRoom ) {
+        this.email = email;
+        this.password = password;
+        this.dateOfBirth = dateOfBirth;
+        this.isAdult = Period.between(dateOfBirth, LocalDate.now())
+                .getYears()>=18;
+        bookedRooms.add(hotelRoom);
     }
 
     private Boolean isAdult(int years){
