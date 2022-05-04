@@ -1,6 +1,5 @@
 package com.maxamato.bookingsystem.entities;
 
-import com.maxamato.bookingsystem.dtos.HotelDto;
 import lombok.*;
 
 import javax.persistence.*;
@@ -8,9 +7,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Period;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Setter
