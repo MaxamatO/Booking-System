@@ -13,6 +13,7 @@ import lombok.Setter;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -44,21 +45,15 @@ public class ClientService {
         if(!hotelRoomRepository.existsById(roomId)){
             throw new IllegalStateException(new Exception("Room with provided id does not exist"));
         }
-        HotelRoom hotelRoom = hotelRoomRepository.getById(roomId);
+        HotelRoom hotelRoom = hotelRoomRepository.findById(roomId).get();
 
         if(!clientRepository.existsById(clientId)){
             throw new IllegalStateException(new Exception("Client with provided id does not exist"));
         }
-        Client client = clientRepository.getById(clientId);
+        Client client = clientRepository.findById(clientId).get();
 
-        clientRepository.save(
-                new Client(
-                        client.getEmail(),
-                        client.getPassword(),
-                        client.getDateOfBirth(),
-                        hotelRoom
-                )
-        );
+
+        client.getBookedRooms().add(hotelRoom);
 
         return hotelRoomRepository.findAll();
 
@@ -66,5 +61,14 @@ public class ClientService {
 
     public List<Client> findAllClients() {
         return clientRepository.findAll();
+    }
+
+    public String deleteClient(String clientEmail) {
+        if(!clientRepository.existsByEmail(clientEmail)){
+            throw new IllegalStateException(new Exception("Client does not exist."));
+        }
+        Long clientId = clientRepository.findByEmail(clientEmail).getClientId();
+        clientRepository.deleteById(clientId);
+        return String.format("Client with id %s got deleted", clientId);
     }
 }

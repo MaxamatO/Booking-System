@@ -39,7 +39,7 @@ public class Client {
             joinColumns = @JoinColumn(name = "client_id"),
             inverseJoinColumns = @JoinColumn(name = "hotel_room_id")
     )
-    private final List<HotelRoom> bookedRooms = new ArrayList<>();
+    private List<HotelRoom> bookedRooms = new ArrayList<>();
 
     public Client(String email, String password, LocalDate dateOfBirth) {
         this.email = email;

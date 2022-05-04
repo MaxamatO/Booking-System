@@ -53,4 +53,9 @@ public class HotelController {
         return hotelService.getAllHotelRooms();
     }
 
+    @DeleteMapping("hotel/room/{roomId}/delete")
+    public String deleteHotelRoom(@PathVariable Long roomId){
+        return hotelService.deleteHotelRoom(roomId);
+    }
+
 }

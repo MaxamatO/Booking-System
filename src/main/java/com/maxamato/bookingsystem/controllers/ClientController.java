@@ -16,7 +16,7 @@ public class ClientController {
     private final ClientService clientService;
 
     @GetMapping(path = "all")
-    public List<Client> findAllClients(){
+    public List<Client> findAllClients() {
         return clientService.findAllClients();
     }
 
@@ -25,12 +25,15 @@ public class ClientController {
         return clientService.addClient(clientRequest);
     }
 
-    // NOT WORKING
     @PutMapping(path = "{clientId}/rooms/{roomId}/add")
-    public List<HotelRoom> addClientToHotelRoom(@PathVariable Long clientId, @PathVariable Long roomId){
+    public List<HotelRoom> addClientToHotelRoom(@PathVariable Long clientId, @PathVariable Long roomId) {
         return clientService.addClientToHotelRoom(clientId, roomId);
     }
 
+    @DeleteMapping(path = "{clientEmail}/delete")
+    public String deleteClient(@PathVariable String clientEmail) {
+        return clientService.deleteClient(clientEmail);
+    }
 
 
 }

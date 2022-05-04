@@ -70,4 +70,11 @@ public class HotelService {
     }
 
 
+    public String deleteHotelRoom(Long roomId) {
+        if(!hotelRoomRepository.existsById(roomId)){
+            throw new IllegalStateException(new Exception("Room with provided id does not exist"));
+        }
+        hotelRoomRepository.deleteById(roomId);
+        return "Deleted";
+    }
 }
