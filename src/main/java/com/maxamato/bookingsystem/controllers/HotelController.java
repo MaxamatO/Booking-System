@@ -34,7 +34,7 @@ public class HotelController {
                 hotelRequest.getCountry(), hotelRequest.getStars())).collect(Collectors.toList());
     }
 
-    @GetMapping(path = "hotels/")
+    @GetMapping(path = "hotels/from/")
     public List<HotelDto> getHotelsFrom(@RequestParam(name = "country") String country){
         return hotelService.getHotelsFrom(country).stream().map(hotelRequest -> new HotelDto(hotelRequest.getHotelName(), hotelRequest.getCity(),
                 hotelRequest.getCountry(), hotelRequest.getStars())).collect(Collectors.toList());

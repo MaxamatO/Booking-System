@@ -1,5 +1,7 @@
 package com.maxamato.bookingsystem.controllers;
 
+import com.maxamato.bookingsystem.dtos.ClientAddressDto;
+import com.maxamato.bookingsystem.dtos.ClientDto;
 import com.maxamato.bookingsystem.entities.Client;
 import com.maxamato.bookingsystem.entities.HotelRoom;
 import com.maxamato.bookingsystem.entities.requests.ClientRequest;
@@ -8,6 +10,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @RestController
@@ -16,8 +19,29 @@ public class ClientController {
     private final ClientService clientService;
 
     @GetMapping(path = "all")
-    public List<Client> findAllClients() {
-        return clientService.findAllClients();
+    public List<ClientDto> findAllClients() {
+        return clientService.findAllClients().stream().map(
+                client -> new ClientDto(
+                        client.getEmail(),
+                        client.getDateOfBirth(),
+                        client.getBookedRooms(),
+                        client.isAdult()
+                        )
+        ).collect(Collectors.toList());
+    }
+
+    @GetMapping(path = "all/info")
+    public List<ClientAddressDto> findAllClientsWithAddress(){
+        return clientService.findAllClients().stream().map(
+                client -> new ClientAddressDto(
+                        client.getEmail(),
+                        client.getCountry(),
+                        client.getCity(),
+                        client.getStreet(),
+                        client.getPostCode(),
+                        client.getHouseNumber()
+                )
+        ).collect(Collectors.toList());
     }
 
     @PostMapping(path = "add")

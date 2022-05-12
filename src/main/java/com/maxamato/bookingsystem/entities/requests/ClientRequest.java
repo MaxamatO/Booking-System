@@ -14,5 +14,10 @@ public class ClientRequest {
     private final String email;
     private final String password;
     private final LocalDate dateOfBirth;
+    private final String country;
+    private final String postCode;
+    private final String city;
+    private final String street;
+    private final int houseNumber;
 
 }

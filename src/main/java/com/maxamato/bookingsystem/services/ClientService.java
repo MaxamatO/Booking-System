@@ -45,6 +45,12 @@ public class ClientService {
             throw new IllegalStateException(new Exception("User with provided email address already exists."));
         }
 
+        String whichAreBlank = blankFields(clientRequest);
+
+        if(!whichAreBlank.equals("Everything covered.")){
+            throw new IllegalStateException(new Exception(whichAreBlank));
+        }
+
         String password = clientRequest.getPassword();
 
         if(!isValidEmailAddress(email)){
@@ -64,27 +70,63 @@ public class ClientService {
         Client client = new Client(
                 clientRequest.getEmail(),
                 encodedPassword,
-                clientRequest.getDateOfBirth()
+                clientRequest.getDateOfBirth(),
+                clientRequest.getPostCode(),
+                clientRequest.getStreet(),
+                clientRequest.getCountry(),
+                clientRequest.getCity(),
+                clientRequest.getHouseNumber()
         );
         clientRepository.save(client);
         return client;
+    }
+
+    private String blankFields(ClientRequest clientRequest) {
+        String email = clientRequest.getEmail();
+        String password = clientRequest.getPassword();
+        LocalDate dateOfBirth = clientRequest.getDateOfBirth();
+        String city = clientRequest.getCity();
+        String country = clientRequest.getCountry();
+        int houseNumber = clientRequest.getHouseNumber();
+        String postCode = clientRequest.getPostCode();
+        String street = clientRequest.getStreet();
+
+        if(email == null){
+            return "Email field can't be empty.";
+        }
+        if(password == null){
+            return "Password field can't be empty.";
+        }
+        if(dateOfBirth == null){
+            return "Date of birth field can't be empty.";
+        }
+        if(city == null){
+            return "City field can't be empty.";
+        }
+        if(country == null){
+            return "Country field can't be empty.";
+        }
+        if(houseNumber == 0){
+            return "House number field can't be empty.";
+        }
+        if(postCode == null){
+            return "Postcode field can't be empty.";
+        }
+        if(street == null){
+            return "Street field can't be empty.";
+        }
+        return "Everything covered.";
     }
 
     public List<HotelRoom> addClientToHotelRoom(Long clientId, Long roomId) {
         if (!hotelRoomRepository.existsById(roomId)) {
             throw new IllegalStateException(new Exception("Room with provided id does not exist"));
         }
-        HotelRoom hotelRoom = hotelRoomRepository.findById(roomId).get();
-
+        HotelRoom hotelRoom = hotelRoomRepository.findById(roomId).orElseThrow(() -> new IllegalStateException(new Exception("Hotel room does not exist")));
         if (!clientRepository.existsById(clientId)) {
             throw new IllegalStateException(new Exception("Client with provided id does not exist"));
         }
-        Client client = clientRepository.findById(clientId).get();
-
-        Hotel hotel = hotelRepository.findById(hotelRoom.getHotel().getHotelId()).orElseThrow(() -> new IllegalStateException(new Exception("Hotel does not exist")));
-
-        System.out.println(hotel.getNumberOfRooms());
-
+        Client client = clientRepository.findById(clientId).orElseThrow(() -> new IllegalStateException(new Exception("Client does not exist")));
         client.getBookedRooms().add(hotelRoom);
 
         return hotelRoomRepository.findAll();
