@@ -24,28 +24,33 @@ public class HotelController {
     // ****** HOTEL PART *******
 
     @PostMapping(path = "hotel/add")
-    public String addHotel(@RequestBody HotelRequest hotelRequest){
+    public Hotel addHotel(@RequestBody HotelRequest hotelRequest){
         return hotelService.addHotel(hotelRequest);
     }
 
     @GetMapping(path = "hotels/all")
     public List<HotelDto> getHotels(){
         return hotelService.getHotels().stream().map(hotelRequest -> new HotelDto(hotelRequest.getHotelName(), hotelRequest.getCity(),
-                hotelRequest.getCountry(), hotelRequest.getStars())).collect(Collectors.toList());
+                hotelRequest.getCountry(), hotelRequest.getStars(), hotelRequest.getNumberOfRooms())).collect(Collectors.toList());
     }
 
     @GetMapping(path = "hotels/from/")
     public List<HotelDto> getHotelsFrom(@RequestParam(name = "country") String country){
         return hotelService.getHotelsFrom(country).stream().map(hotelRequest -> new HotelDto(hotelRequest.getHotelName(), hotelRequest.getCity(),
-                hotelRequest.getCountry(), hotelRequest.getStars())).collect(Collectors.toList());
+                hotelRequest.getCountry(), hotelRequest.getStars(), hotelRequest.getNumberOfRooms())).collect(Collectors.toList());
+    }
+
+    @GetMapping(path = "hotels/")
+    public HotelDto getHotel(@RequestParam(name = "id") Long id){
+        return hotelService.getHotel(id);
     }
 
     // ****** HOTEL ROOM PART *******
 
     @PostMapping("hotel/room/add")
-    public String addHotelRoom(@RequestBody HotelRoomRequest hotelRoomRequest){
-        hotelService.addHotelRoom(hotelRoomRequest);
-        return "added";
+    public HotelRoom addHotelRoom(@RequestBody HotelRoomRequest hotelRoomRequest){
+        return hotelService.addHotelRoom(hotelRoomRequest);
+
     }
 
     @GetMapping("hotel/rooms/all")
@@ -54,7 +59,7 @@ public class HotelController {
     }
 
     @DeleteMapping("hotel/room/{roomId}/delete")
-    public String deleteHotelRoom(@PathVariable Long roomId){
+    public HotelRoom deleteHotelRoom(@PathVariable Long roomId){
         return hotelService.deleteHotelRoom(roomId);
     }
 

@@ -1,5 +1,7 @@
 package com.maxamato.bookingsystem.services;
 
+import com.maxamato.bookingsystem.dtos.HotelDto;
+import com.maxamato.bookingsystem.dtos.HotelRoomDto;
 import com.maxamato.bookingsystem.entities.Client;
 import com.maxamato.bookingsystem.entities.Hotel;
 import com.maxamato.bookingsystem.entities.HotelRoom;
@@ -28,18 +30,29 @@ public class HotelService {
     private final HotelRoomRepository hotelRoomRepository;
     private final ClientRepository clientRepository;
 
-    public String addHotel(HotelRequest hotel){
-        hotelRepository.save(new Hotel(
-                hotel.getHotelName(),
-                hotel.getCity(),
-                hotel.getCountry(),
-                hotel.getStars(),
-                hotel.getIsAvailableOnSummer()
+    public Hotel addHotel(HotelRequest hotelRequest){
+        Hotel hotel = new Hotel(
+                hotelRequest.getHotelName(),
+                hotelRequest.getCity(),
+                hotelRequest.getCountry(),
+                hotelRequest.getStars(),
+                hotelRequest.getIsAvailableOnSummer());
 
-        ));
-        return "added";
+        hotelRepository.save(hotel);
+
+        return hotel;
     }
 
+    public HotelDto getHotel(Long id){
+        return hotelRepository.findById(id).map(
+                hotel -> new HotelDto(
+                        hotel.getHotelName(),
+                        hotel.getCity(),
+                        hotel.getCountry(),
+                        hotel.getStars(),
+                        hotel.getNumberOfRooms()
+                )).orElseThrow();
+    }
 
     public List<Hotel> getHotels() {
         return hotelRepository.findAll();
@@ -51,30 +64,33 @@ public class HotelService {
 
     }
 
-
-    public void addHotelRoom(HotelRoomRequest hotelRoomRequest) {
-
-        Hotel hotel = hotelRepository.getById(hotelRoomRequest.getHotelId());
-
-        hotelRoomRepository.save(new HotelRoom(
+    public HotelRoom addHotelRoom(HotelRoomRequest hotelRoomRequest) {
+        Hotel hotel = hotelRepository.findById(hotelRoomRequest.getHotelId()).orElseThrow(
+                () -> new IllegalStateException(new Exception(
+                        "Hotel with provided id does not exist."
+                )));
+        HotelRoom hotelRoom = new HotelRoom(
                 hotelRoomRequest.getNumberOfBeds(),
                 hotelRoomRequest.getHasPrivateToilet(),
                 hotelRoomRequest.getIsAvailable(),
                 hotel
-        ));
-
+        );
+        hotelRoomRepository.save(hotelRoom);
+        return hotelRoom;
     }
 
     public List<HotelRoom> getAllHotelRooms() {
         return hotelRoomRepository.findAll();
     }
 
-
-    public String deleteHotelRoom(Long roomId) {
+    public HotelRoom deleteHotelRoom(Long roomId) {
         if(!hotelRoomRepository.existsById(roomId)){
             throw new IllegalStateException(new Exception("Room with provided id does not exist"));
         }
+        HotelRoom hotelRoom = hotelRoomRepository.findById(roomId).orElseThrow(() -> new IllegalStateException(
+                        new Exception("Room with provided id does not exist"))
+        );
         hotelRoomRepository.deleteById(roomId);
-        return "Deleted";
+        return hotelRoom;
     }
 }

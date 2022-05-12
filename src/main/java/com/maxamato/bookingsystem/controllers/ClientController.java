@@ -2,6 +2,7 @@ package com.maxamato.bookingsystem.controllers;
 
 import com.maxamato.bookingsystem.dtos.ClientAddressDto;
 import com.maxamato.bookingsystem.dtos.ClientDto;
+import com.maxamato.bookingsystem.dtos.ClientRoomsDto;
 import com.maxamato.bookingsystem.entities.Client;
 import com.maxamato.bookingsystem.entities.HotelRoom;
 import com.maxamato.bookingsystem.entities.requests.ClientRequest;
@@ -20,28 +21,17 @@ public class ClientController {
 
     @GetMapping(path = "all")
     public List<ClientDto> findAllClients() {
-        return clientService.findAllClients().stream().map(
-                client -> new ClientDto(
-                        client.getEmail(),
-                        client.getDateOfBirth(),
-                        client.getBookedRooms(),
-                        client.isAdult()
-                        )
-        ).collect(Collectors.toList());
+        return clientService.findAllClients();
     }
 
     @GetMapping(path = "all/info")
     public List<ClientAddressDto> findAllClientsWithAddress(){
-        return clientService.findAllClients().stream().map(
-                client -> new ClientAddressDto(
-                        client.getEmail(),
-                        client.getCountry(),
-                        client.getCity(),
-                        client.getStreet(),
-                        client.getPostCode(),
-                        client.getHouseNumber()
-                )
-        ).collect(Collectors.toList());
+        return clientService.findAllClientsAddress();
+    }
+
+    @GetMapping(path = "all/rooms")
+    public List<ClientRoomsDto> findAllClientsWithRooms(){
+        return clientService.findAllClientsRooms();
     }
 
     @PostMapping(path = "add")
@@ -50,7 +40,7 @@ public class ClientController {
     }
 
     @PutMapping(path = "{clientId}/rooms/{roomId}/add")
-    public List<HotelRoom> addClientToHotelRoom(@PathVariable Long clientId, @PathVariable Long roomId) {
+    public ClientRoomsDto addClientToHotelRoom(@PathVariable Long clientId, @PathVariable Long roomId) {
         return clientService.addClientToHotelRoom(clientId, roomId);
     }
 
