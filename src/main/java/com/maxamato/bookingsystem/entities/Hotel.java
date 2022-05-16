@@ -27,7 +27,7 @@ public class Hotel {
     @GeneratedValue(
             strategy = GenerationType.IDENTITY
     )
-    private Long hotelId;
+    private Long id;
     private String hotelName;
     private String city;
     private String country;
@@ -35,6 +35,12 @@ public class Hotel {
 
     @Column(name = "number_of_rooms", columnDefinition = "integer default 0")
     private Integer numberOfRooms=0;
+
+    @OneToMany(
+            fetch = FetchType.LAZY
+    )
+    @JoinColumn(name = "hotel_room_id")
+    private List<HotelRoom> hotelRooms = new ArrayList<>();
 
     @Column(name = "is_available_on_summer")
     private Boolean isAvailableOnSummer;
@@ -47,6 +53,12 @@ public class Hotel {
         this.stars = stars;
         this.isAvailableOnSummer = Objects.requireNonNullElse(isAvailableOnSummer, true);
     }
+
+    public void addHotelRoom(HotelRoom hotelRoom){
+        this.hotelRooms.add(hotelRoom);
+    }
+
+
 
 
 }
