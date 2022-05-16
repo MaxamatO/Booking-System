@@ -28,10 +28,15 @@ public class HotelController {
         return hotelService.addHotel(hotelRequest);
     }
 
-    @GetMapping(path = "hotels/all")
+    @GetMapping(path = "hotels/alls")
     public List<HotelDto> getHotels(){
         return hotelService.getHotels().stream().map(hotelRequest -> new HotelDto(hotelRequest.getHotelName(), hotelRequest.getCity(),
                 hotelRequest.getCountry(), hotelRequest.getStars(), hotelRequest.getNumberOfRooms())).collect(Collectors.toList());
+    }
+
+    @GetMapping(path = "hotels/all")
+    public List<Hotel> getHotelss(){
+        return hotelService.getHotels();
     }
 
     @GetMapping(path = "hotels/from/")
