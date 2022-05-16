@@ -71,12 +71,13 @@ public class HotelService {
         HotelRoom hotelRoom = new HotelRoom(
                 hotelRoomRequest.getNumberOfBeds(),
                 hotelRoomRequest.getHasPrivateToilet(),
-                hotelRoomRequest.getIsAvailable(),
-                hotel
+                hotelRoomRequest.getIsAvailable()
         );
+        hotel.addHotelRoom(hotelRoom);
         hotelRoomRepository.save(hotelRoom);
-        hotelRepository.executeUpdate();
+        hotelRepository.executeNumberOfRoomsUpdate();
         return hotelRoom;
+
     }
 
     public List<HotelRoom> getAllHotelRooms() {

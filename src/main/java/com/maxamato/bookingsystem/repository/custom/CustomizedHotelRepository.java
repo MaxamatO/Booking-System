@@ -8,5 +8,5 @@ import javax.persistence.EntityManager;
 
 public interface CustomizedHotelRepository {
 
-    String executeUpdate();
+    String executeNumberOfRoomsUpdate();
 }
