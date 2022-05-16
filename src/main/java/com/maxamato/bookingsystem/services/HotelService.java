@@ -39,7 +39,6 @@ public class HotelService {
                 hotelRequest.getIsAvailableOnSummer());
 
         hotelRepository.save(hotel);
-
         return hotel;
     }
 
@@ -76,6 +75,7 @@ public class HotelService {
                 hotel
         );
         hotelRoomRepository.save(hotelRoom);
+        hotelRepository.executeUpdate();
         return hotelRoom;
     }
 
