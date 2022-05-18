@@ -31,11 +31,9 @@ public class Client {
     private String city;
     private int houseNumber;
 
-    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    @JoinTable(
-            name = "clients_rooms",
-            joinColumns = @JoinColumn(name = "client_id"),
-            inverseJoinColumns = @JoinColumn(name = "hotel_room_id")
+    // Not working, look into ClientService.addClientToHotelRoom
+    @ManyToMany(
+            mappedBy = "clients"
     )
     private List<HotelRoom> bookedRooms = new ArrayList<>();
 
