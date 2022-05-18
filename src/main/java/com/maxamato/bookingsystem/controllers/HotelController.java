@@ -28,26 +28,26 @@ public class HotelController {
         return hotelService.addHotel(hotelRequest);
     }
 
-    @GetMapping(path = "hotels/alls")
-    public List<HotelDto> getHotels(){
-        return hotelService.getHotels().stream().map(hotelRequest -> new HotelDto(hotelRequest.getHotelName(), hotelRequest.getCity(),
-                hotelRequest.getCountry(), hotelRequest.getStars(), hotelRequest.getNumberOfRooms())).collect(Collectors.toList());
-    }
-
+    // TODO: Move DTO mapping into services
     @GetMapping(path = "hotels/all")
-    public List<Hotel> getHotelss(){
+    public List<HotelDto> getHotels(){
         return hotelService.getHotels();
     }
 
+    // TODO: Move DTO mapping into services
     @GetMapping(path = "hotels/from/")
     public List<HotelDto> getHotelsFrom(@RequestParam(name = "country") String country){
-        return hotelService.getHotelsFrom(country).stream().map(hotelRequest -> new HotelDto(hotelRequest.getHotelName(), hotelRequest.getCity(),
-                hotelRequest.getCountry(), hotelRequest.getStars(), hotelRequest.getNumberOfRooms())).collect(Collectors.toList());
+        return hotelService.getHotelsFrom(country);
     }
 
     @GetMapping(path = "hotels/")
     public HotelDto getHotel(@RequestParam(name = "id") Long id){
         return hotelService.getHotel(id);
+    }
+
+    @DeleteMapping(path = "hotel/{hotel_id}/delete")
+    public String deleteHotel(@PathVariable(name = "hotel_id") Long id){
+        return hotelService.deleteHotel(id);
     }
 
     // ****** HOTEL ROOM PART *******
@@ -59,7 +59,7 @@ public class HotelController {
     }
 
     @GetMapping("hotel/rooms/all")
-    public List<HotelRoom> getAllHotelRooms(){
+    public List<HotelRoomDto> getAllHotelRooms(){
         return hotelService.getAllHotelRooms();
     }
 
