@@ -14,8 +14,8 @@ public class CustomizedHotelRepositoryImpl implements CustomizedHotelRepository{
 
     @Override
     public String executeNumberOfRoomsUpdate() {
-        String sql = "update Hotel h SET numberOfRooms = (SELECT COUNT(r.hotel.id) FROM HotelRoom r WHERE r.hotel.id = h.id)";
-        final Query hotelTypedQuery = entityManager.createQuery(sql);
+        String sql = "UPDATE hotels SET number_of_rooms = (SELECT COUNT (hotel_room.hotel_id) FROM hotel_room  WHERE hotels.id = hotel_room.hotel_id);";
+        final Query hotelTypedQuery = entityManager.createNativeQuery(sql);
         hotelTypedQuery.executeUpdate();
         return "updated";
     }
