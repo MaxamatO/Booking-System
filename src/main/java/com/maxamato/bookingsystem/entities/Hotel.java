@@ -37,9 +37,10 @@ public class Hotel {
     private Integer numberOfRooms=0;
 
     @OneToMany(
-            fetch = FetchType.LAZY
+            fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL
     )
-    @JoinColumn(name = "hotel_room_id")
+    @JoinColumn(name = "hotel_id")
     private List<HotelRoom> hotelRooms = new ArrayList<>();
 
     @Column(name = "is_available_on_summer")
