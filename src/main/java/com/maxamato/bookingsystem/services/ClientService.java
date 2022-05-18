@@ -5,7 +5,6 @@ import com.maxamato.bookingsystem.dtos.ClientAddressDto;
 import com.maxamato.bookingsystem.dtos.ClientDto;
 import com.maxamato.bookingsystem.dtos.ClientRoomsDto;
 import com.maxamato.bookingsystem.entities.Client;
-import com.maxamato.bookingsystem.entities.Hotel;
 import com.maxamato.bookingsystem.entities.HotelRoom;
 import com.maxamato.bookingsystem.entities.requests.ClientRequest;
 import com.maxamato.bookingsystem.repository.ClientRepository;
@@ -14,22 +13,15 @@ import com.maxamato.bookingsystem.repository.HotelRoomRepository;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.expression.ExpressionException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.ResponseBody;
-
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.chrono.ChronoLocalDate;
-import java.time.chrono.ChronoLocalDateTime;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -97,6 +89,8 @@ public class ClientService {
     }
 
 
+    // TODO: Fix infinite loop at HotelRoom.clients and Client.bookedRooms
+    // It adds each other to each other infinitely
     public ClientRoomsDto addClientToHotelRoom(Long clientId, Long roomId) {
         if (!hotelRoomRepository.existsById(roomId)) {
             throw new IllegalStateException(new Exception("Room with provided id does not exist"));
@@ -107,6 +101,8 @@ public class ClientService {
         }
         Client client = clientRepository.findById(clientId).orElseThrow(() -> new IllegalStateException(new Exception("Client does not exist")));
         client.getBookedRooms().add(hotelRoom);
+
+        hotelRoom.getClients().add(client);
 
         return clientRepository.findById(clientId).map(client1 -> new ClientRoomsDto(
                 client1.getEmail(),
