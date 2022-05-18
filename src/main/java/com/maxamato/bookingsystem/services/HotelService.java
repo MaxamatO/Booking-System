@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -49,18 +50,35 @@ public class HotelService {
                         hotel.getCity(),
                         hotel.getCountry(),
                         hotel.getStars(),
-                        hotel.getNumberOfRooms()
+                        hotel.getNumberOfRooms(),
+                        hotel.getHotelRooms()
                 )).orElseThrow();
     }
 
-    public List<Hotel> getHotels() {
-        return hotelRepository.findAll();
+    public List<HotelDto> getHotels() {
+        return hotelRepository.findAll().stream().map(
+                hotel -> new HotelDto(
+                        hotel.getHotelName(),
+                        hotel.getCity(),
+                        hotel.getCountry(),
+                        hotel.getStars(),
+                        hotel.getNumberOfRooms(),
+                        hotel.getHotelRooms()
+                )
+        ).collect(Collectors.toList());
     }
 
-    public List<Hotel> getHotelsFrom(String country) {
-
-        return hotelRepository.findAllByCountry(country);
-
+    public List<HotelDto> getHotelsFrom(String country) {
+        return hotelRepository.findAllByCountry(country).stream().map(
+                hotel -> new HotelDto(
+                        hotel.getHotelName(),
+                        hotel.getCity(),
+                        hotel.getCountry(),
+                        hotel.getStars(),
+                        hotel.getNumberOfRooms(),
+                        hotel.getHotelRooms()
+                )
+        ).collect(Collectors.toList());
     }
 
     public HotelRoom addHotelRoom(HotelRoomRequest hotelRoomRequest) {
@@ -80,8 +98,16 @@ public class HotelService {
 
     }
 
-    public List<HotelRoom> getAllHotelRooms() {
-        return hotelRoomRepository.findAll();
+    public List<HotelRoomDto> getAllHotelRooms() {
+        return hotelRoomRepository.findAll().stream().map(
+                hotelRoom -> new HotelRoomDto(
+                        hotelRoom.getIsAvailable(),
+                        hotelRoom.getNumberOfBeds(),
+                        hotelRoom.getHasPrivateToilet(),
+                        hotelRoom.getNumberOfClients(),
+                        hotelRoom.getClients()
+                )
+        ).collect(Collectors.toList());
     }
 
     public HotelRoom deleteHotelRoom(Long roomId) {
@@ -93,5 +119,11 @@ public class HotelService {
         );
         hotelRoomRepository.deleteById(roomId);
         return hotelRoom;
+    }
+
+    public String deleteHotel(Long id) {
+//        hotelRepository.deleteById(id);
+
+        return "Deleted";
     }
 }
