@@ -1,9 +1,12 @@
 package com.maxamato.bookingsystem.dtos;
 
-public record HotelRoomDto(String hotelName,
-                           String city,
-                           String country,
-                           Integer stars,
-                           Integer numberOfRooms,
-                           Boolean isAvailableOnSummer) {
+import com.maxamato.bookingsystem.entities.Client;
+
+import java.util.List;
+
+public record HotelRoomDto(Boolean isAvailable,
+                           int numberOfBeds,
+                           Boolean hasPrivateToilet,
+                           int numberOfClients,
+                           List<Client> clients) {
 }
