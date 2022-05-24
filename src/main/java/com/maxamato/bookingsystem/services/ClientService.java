@@ -1,9 +1,7 @@
 package com.maxamato.bookingsystem.services;
 
-
-import com.maxamato.bookingsystem.dtos.ClientAddressDto;
 import com.maxamato.bookingsystem.dtos.ClientDto;
-import com.maxamato.bookingsystem.dtos.ClientRoomsDto;
+import com.maxamato.bookingsystem.dtos.HotelRoomDto;
 import com.maxamato.bookingsystem.entities.Client;
 import com.maxamato.bookingsystem.entities.HotelRoom;
 import com.maxamato.bookingsystem.entities.requests.ClientRequest;
@@ -40,13 +38,20 @@ public class ClientService {
                 client -> new ClientDto(
                         client.getEmail(),
                         client.getDateOfBirth(),
-                        client.getBookedRooms(),
+                        client.getBookedRooms().stream().map(
+                                hotelRoom -> new HotelRoomDto(
+                                        hotelRoom.getIsAvailable(),
+                                        hotelRoom.getNumberOfBeds(),
+                                        hotelRoom.getHasPrivateToilet(),
+                                        hotelRoom.getNumberOfClients()
+                                )
+                        ).collect(Collectors.toList()),
                         client.isAdult()
                 )
         ).collect(Collectors.toList());
     }
 
-    public Client addClient(ClientRequest clientRequest) {
+    public ClientDto addClient(ClientRequest clientRequest) {
         String email = clientRequest.getEmail();
         if (clientRepository.existsByEmail(email)) {
             throw new IllegalStateException(new Exception("User with provided email address already exists."));
@@ -85,13 +90,20 @@ public class ClientService {
                 clientRequest.getHouseNumber()
         );
         clientRepository.save(client);
-        return client;
+        return new ClientDto(
+                client.getEmail(),
+                client.getDateOfBirth(),
+                client.isAdult(),
+                client.getCountry(),
+                client.getCity(),
+                client.getStreet(),
+                client.getPostCode(),
+                client.getHouseNumber()
+        );
     }
 
 
-    // TODO: Fix infinite loop at HotelRoom.clients and Client.bookedRooms
-    // It adds each other to each other infinitely
-    public ClientRoomsDto addClientToHotelRoom(Long clientId, Long roomId) {
+    public ClientDto addClientToHotelRoom(Long clientId, Long roomId) {
         if (!hotelRoomRepository.existsById(roomId)) {
             throw new IllegalStateException(new Exception("Room with provided id does not exist"));
         }
@@ -104,28 +116,46 @@ public class ClientService {
 
         hotelRoom.getClients().add(client);
 
-        return clientRepository.findById(clientId).map(client1 -> new ClientRoomsDto(
+        return clientRepository.findById(clientId).map(client1 -> new ClientDto(
                 client1.getEmail(),
-                client1.isAdult(),
-                client1.getBookedRooms()
+                client1.getDateOfBirth(),
+                client1.getBookedRooms().stream().map(
+                        hR -> new HotelRoomDto(
+                                hR.getIsAvailable(),
+                                hR.getNumberOfBeds(),
+                                hR.getHasPrivateToilet(),
+                                hR.getNumberOfClients()
+                        )
+                ).collect(Collectors.toList()),
+                client1.isAdult()
         )).orElseThrow(() -> new IllegalStateException(new Exception("Client does not exist")));
 
     }
 
-    public List<ClientRoomsDto> findAllClientsRooms() {
+    public List<ClientDto> findAllClientsRooms() {
         return clientRepository.findAll().stream().map(
-                client -> new ClientRoomsDto(
+                client -> new ClientDto(
                         client.getEmail(),
-                        client.isAdult(),
-                        client.getBookedRooms()
+                        client.getDateOfBirth(),
+                        client.getBookedRooms().stream().map(
+                                hotelRoom -> new HotelRoomDto(
+                                        hotelRoom.getIsAvailable(),
+                                        hotelRoom.getNumberOfBeds(),
+                                        hotelRoom.getHasPrivateToilet(),
+                                        hotelRoom.getNumberOfClients()
+                                )
+                        ).collect(Collectors.toList()),
+                        client.isAdult()
                 )
-        ).collect(Collectors.toList());
+                ).collect(Collectors.toList());
     }
 
-    public List<ClientAddressDto> findAllClientsAddress() {
+    public List<ClientDto> findAllClientsAddress() {
         return clientRepository.findAll().stream().map(
-                client -> new ClientAddressDto(
+                client -> new ClientDto(
                         client.getEmail(),
+                        client.getDateOfBirth(),
+                        client.isAdult(),
                         client.getCountry(),
                         client.getCity(),
                         client.getStreet(),
@@ -135,6 +165,8 @@ public class ClientService {
         ).collect(Collectors.toList());
     }
 
+    // Not implemented yet
+    // Foreign key error
     public String deleteClient(String clientEmail) {
         if (!clientRepository.existsByEmail(clientEmail)) {
             throw new IllegalStateException(new Exception("Client does not exist."));
@@ -144,7 +176,7 @@ public class ClientService {
         return String.format("Client with id %s got deleted", clientId);
     }
 
-    // PRIVATE FUNCTIONS USED FOR AUTH
+    // PRIVATE FUNCTIONS USED FOR CHECKING CREDENTIALS
     private String encode(String password) {
         BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
         System.out.println(bCryptPasswordEncoder.encode(password));

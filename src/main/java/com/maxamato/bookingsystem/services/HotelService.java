@@ -1,5 +1,6 @@
 package com.maxamato.bookingsystem.services;
 
+import com.maxamato.bookingsystem.dtos.ClientDto;
 import com.maxamato.bookingsystem.dtos.HotelDto;
 import com.maxamato.bookingsystem.dtos.HotelRoomDto;
 import com.maxamato.bookingsystem.entities.Client;
@@ -51,7 +52,14 @@ public class HotelService {
                         hotel.getCountry(),
                         hotel.getStars(),
                         hotel.getNumberOfRooms(),
-                        hotel.getHotelRooms()
+                        hotel.getHotelRooms().stream().map(
+                                hotelRoom -> new HotelRoomDto(
+                                        hotelRoom.getIsAvailable(),
+                                        hotelRoom.getNumberOfBeds(),
+                                        hotelRoom.getHasPrivateToilet(),
+                                        hotelRoom.getNumberOfClients()
+                                )
+                        ).collect(Collectors.toList())
                 )).orElseThrow();
     }
 
@@ -63,7 +71,32 @@ public class HotelService {
                         hotel.getCountry(),
                         hotel.getStars(),
                         hotel.getNumberOfRooms(),
-                        hotel.getHotelRooms()
+                        hotel.getHotelRooms().stream().map(
+                                hotelRoom -> new HotelRoomDto(
+                                        hotelRoom.getIsAvailable(),
+                                        hotelRoom.getNumberOfBeds(),
+                                        hotelRoom.getHasPrivateToilet(),
+                                        hotelRoom.getNumberOfClients()
+
+                                        // Adding hotelRoom.getClients() must be followed by another stream().map() and that gets pretty ugly
+                                        // TODO: Make it more functional and readable
+
+
+//                                        hotelRoom.getClients().stream().map(
+//                                                client -> new ClientDto(
+//                                                        client.getEmail(),
+//                                                        client.getDateOfBirth(),
+//                                                        client.isAdult(),
+//                                                        client.getCountry(),
+//                                                        client.getCity(),
+//                                                        client.getStreet(),
+//                                                        client.getPostCode(),
+//                                                        client.getHouseNumber()
+//                                                )
+//                                        ).collect(Collectors.toList())
+
+                                )
+                        ).collect(Collectors.toList())
                 )
         ).collect(Collectors.toList());
     }
@@ -76,7 +109,14 @@ public class HotelService {
                         hotel.getCountry(),
                         hotel.getStars(),
                         hotel.getNumberOfRooms(),
-                        hotel.getHotelRooms()
+                        hotel.getHotelRooms().stream().map(
+                                hotelRoom -> new HotelRoomDto(
+                                        hotelRoom.getIsAvailable(),
+                                        hotelRoom.getNumberOfBeds(),
+                                        hotelRoom.getHasPrivateToilet(),
+                                        hotelRoom.getNumberOfClients()
+                                )
+                        ).collect(Collectors.toList())
                 )
         ).collect(Collectors.toList());
     }
@@ -105,11 +145,24 @@ public class HotelService {
                         hotelRoom.getNumberOfBeds(),
                         hotelRoom.getHasPrivateToilet(),
                         hotelRoom.getNumberOfClients(),
-                        hotelRoom.getClients()
+                        hotelRoom.getClients().stream().map(
+                                client -> new ClientDto(
+                                        client.getEmail(),
+                                        client.getDateOfBirth(),
+                                        client.isAdult(),
+                                        client.getCountry(),
+                                        client.getCity(),
+                                        client.getStreet(),
+                                        client.getPostCode(),
+                                        client.getHouseNumber()
+                                )
+                        ).collect(Collectors.toList())
                 )
         ).collect(Collectors.toList());
     }
 
+    // Not implemented yet
+    // Foreign key error
     public HotelRoom deleteHotelRoom(Long roomId) {
         if(!hotelRoomRepository.existsById(roomId)){
             throw new IllegalStateException(new Exception("Room with provided id does not exist"));
@@ -121,6 +174,9 @@ public class HotelService {
         return hotelRoom;
     }
 
+
+    // Not implemented yet
+    // Foreign key error
     public String deleteHotel(Long id) {
 //        hotelRepository.deleteById(id);
 
