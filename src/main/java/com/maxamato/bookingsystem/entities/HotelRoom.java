@@ -26,7 +26,8 @@ public class HotelRoom {
     private int numberOfClients=0;
 
     @ManyToMany(
-            cascade = {CascadeType.PERSIST, CascadeType.MERGE}
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE},
+            fetch = FetchType.LAZY
     )
     @JoinTable(
             name = "hotel_room_client",

@@ -33,7 +33,8 @@ public class Client {
 
     // Not working, look into ClientService.addClientToHotelRoom
     @ManyToMany(
-            mappedBy = "clients"
+            mappedBy = "clients",
+            fetch = FetchType.LAZY
     )
     private List<HotelRoom> bookedRooms = new ArrayList<>();
 
