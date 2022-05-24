@@ -1,8 +1,6 @@
 package com.maxamato.bookingsystem.controllers;
 
-import com.maxamato.bookingsystem.dtos.ClientAddressDto;
 import com.maxamato.bookingsystem.dtos.ClientDto;
-import com.maxamato.bookingsystem.dtos.ClientRoomsDto;
 import com.maxamato.bookingsystem.entities.Client;
 import com.maxamato.bookingsystem.entities.HotelRoom;
 import com.maxamato.bookingsystem.entities.requests.ClientRequest;
@@ -25,22 +23,22 @@ public class ClientController {
     }
 
     @GetMapping(path = "all/info")
-    public List<ClientAddressDto> findAllClientsWithAddress(){
+    public List<ClientDto> findAllClientsWithAddress(){
         return clientService.findAllClientsAddress();
     }
 
     @GetMapping(path = "all/rooms")
-    public List<ClientRoomsDto> findAllClientsWithRooms(){
+    public List<ClientDto> findAllClientsWithRooms(){
         return clientService.findAllClientsRooms();
     }
 
     @PostMapping(path = "add")
-    public Client addClient(@RequestBody ClientRequest clientRequest) {
+    public ClientDto addClient(@RequestBody ClientRequest clientRequest) {
         return clientService.addClient(clientRequest);
     }
 
     @PutMapping(path = "{clientId}/rooms/{roomId}/add")
-    public ClientRoomsDto addClientToHotelRoom(@PathVariable Long clientId, @PathVariable Long roomId) {
+    public ClientDto addClientToHotelRoom(@PathVariable Long clientId, @PathVariable Long roomId) {
         return clientService.addClientToHotelRoom(clientId, roomId);
     }
 
