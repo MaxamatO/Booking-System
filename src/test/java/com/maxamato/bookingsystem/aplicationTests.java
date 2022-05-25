@@ -5,7 +5,7 @@ import org.springframework.context.ApplicationContext;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-class DemoApplicationTests {
+class aplicationTests {
 
 	@Test
 	void contextLoads(){
