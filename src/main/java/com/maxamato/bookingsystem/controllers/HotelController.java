@@ -28,13 +28,11 @@ public class HotelController {
         return hotelService.addHotel(hotelRequest);
     }
 
-    // TODO: Move DTO mapping into services
     @GetMapping(path = "hotels/all")
     public List<HotelDto> getHotels(){
         return hotelService.getHotels();
     }
 
-    // TODO: Move DTO mapping into services
     @GetMapping(path = "hotels/from/")
     public List<HotelDto> getHotelsFrom(@RequestParam(name = "country") String country){
         return hotelService.getHotelsFrom(country);
