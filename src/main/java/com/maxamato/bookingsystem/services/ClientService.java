@@ -113,8 +113,8 @@ public class ClientService {
         }
         Client client = clientRepository.findById(clientId).orElseThrow(() -> new IllegalStateException(new Exception("Client does not exist")));
         client.getBookedRooms().add(hotelRoom);
-
         hotelRoom.getClients().add(client);
+        hotelRoomRepository.executeNumberOfClientsUpdate();
 
         return clientRepository.findById(clientId).map(client1 -> new ClientDto(
                 client1.getEmail(),
