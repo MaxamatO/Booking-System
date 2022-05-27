@@ -1,2 +1,2 @@
 --update hotels h SET number_of_rooms = (SELECT COUNT(r.hotel_id) FROM hotel_room r WHERE r.hotel_id = h.hotel_id);
-update hotel_room r SET number_of_clients = (SELECT COUNT(c.hotel_room_id) FROM clients_rooms c WHERE c.hotel_room_id = r.hotel_room_id);
+update hotel_room hr SET number_of_clients = (SELECT COUNT(c.hotel_room_id) FROM hotel_room_client c WHERE c.hotel_room_id = hr.id);

@@ -23,7 +23,7 @@ public class Client {
     private String password;
     @Column(name = "date_of_birth")
     private LocalDate dateOfBirth;
-    private LocalDateTime accountCreatedAt=LocalDateTime.now();
+    private LocalDateTime accountCreatedAt = LocalDateTime.now();
     private boolean isAdult;
     private String postCode;
     private String street;
@@ -31,35 +31,40 @@ public class Client {
     private String city;
     private int houseNumber;
 
-    // Not working, look into ClientService.addClientToHotelRoom
+    @OneToMany
+    @JoinColumn(name = "client_id")
+    private List<Booking> bookings;
+
     @ManyToMany(
             mappedBy = "clients",
+            cascade = {CascadeType.MERGE, CascadeType.PERSIST},
             fetch = FetchType.LAZY
     )
     private List<HotelRoom> bookedRooms = new ArrayList<>();
 
-    public Client(String email, String password, LocalDate dateOfBirth, String postCode,String street,String country,String city, int houseNumber) {
+    public Client(String email, String password, LocalDate dateOfBirth, String postCode, String street, String country, String city, int houseNumber) {
         this.email = email;
         this.password = password;
         this.dateOfBirth = dateOfBirth;
         this.isAdult = Period.between(dateOfBirth, LocalDate.now())
-                .getYears()>=18;
+                .getYears() >= 18;
         this.postCode = postCode;
         this.street = street;
         this.country = country;
         this.city = city;
         this.houseNumber = houseNumber;
     }
-    public Client(String email, String password, LocalDate dateOfBirth, HotelRoom hotelRoom ) {
+
+    public Client(String email, String password, LocalDate dateOfBirth, HotelRoom hotelRoom) {
         this.email = email;
         this.password = password;
         this.dateOfBirth = dateOfBirth;
         this.isAdult = Period.between(dateOfBirth, LocalDate.now())
-                .getYears()>=18;
+                .getYears() >= 18;
         bookedRooms.add(hotelRoom);
     }
 
-    private Boolean isAdult(int years){
+    private Boolean isAdult(int years) {
         return years >= 18;
     }
 }

@@ -32,7 +32,7 @@ public class HotelService {
     private final HotelRoomRepository hotelRoomRepository;
     private final ClientRepository clientRepository;
 
-    public Hotel addHotel(HotelRequest hotelRequest){
+    public Hotel addHotel(HotelRequest hotelRequest) {
         Hotel hotel = new Hotel(
                 hotelRequest.getHotelName(),
                 hotelRequest.getCity(),
@@ -44,7 +44,7 @@ public class HotelService {
         return hotel;
     }
 
-    public HotelDto getHotel(Long id){
+    public HotelDto getHotel(Long id) {
         return hotelRepository.findById(id).map(
                 hotel -> new HotelDto(
                         hotel.getHotelName(),
@@ -163,15 +163,22 @@ public class HotelService {
 
     // Not implemented yet
     // Foreign key error
-    public HotelRoom deleteHotelRoom(Long roomId) {
-        if(!hotelRoomRepository.existsById(roomId)){
+    public String deleteHotelRoom(Long roomId) {
+        if (!hotelRoomRepository.existsById(roomId)) {
             throw new IllegalStateException(new Exception("Room with provided id does not exist"));
         }
         HotelRoom hotelRoom = hotelRoomRepository.findById(roomId).orElseThrow(() -> new IllegalStateException(
-                        new Exception("Room with provided id does not exist"))
+                new Exception("Room with provided id does not exist"))
         );
+        if (hotelRoom.getClients().isEmpty()) {
+            hotelRoomRepository.deleteById(roomId);
+            hotelRepository.executeNumberOfRoomsUpdate();
+            return "Deleted, no clients in it";
+        }
+        hotelRoom.emptyClients();
         hotelRoomRepository.deleteById(roomId);
-        return hotelRoom;
+        hotelRepository.executeNumberOfRoomsUpdate();
+        return "Deleted";
     }
 
 

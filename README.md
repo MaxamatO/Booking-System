@@ -24,7 +24,7 @@ One way is to execute the `main` method in the `com.maxamato.bookingsystem.Appli
 
 #### Alternatively you can use the [Spring Boot Maven Plugin](https://docs.spring.io/spring-boot/docs/current/reference/html/build-tool-plugins-maven-plugin.html) like so:
 
-For that in `application-dev.properties` you need to set parameters corresponding to the ones of your newly created database,
+For that in `application-dev.properties` you need to set parameters corresponding to the ones of your *newly created database*,
 to which you'd like to connect.
 
 After you set up everything, just run:

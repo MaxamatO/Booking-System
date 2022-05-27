@@ -23,10 +23,10 @@ public class HotelRoom {
     private int numberOfBeds;
     private Boolean hasPrivateToilet = false;
 
-    private int numberOfClients=0;
+    private int numberOfClients = 0;
 
     @ManyToMany(
-            cascade = {CascadeType.PERSIST, CascadeType.MERGE},
+            cascade = {CascadeType.ALL},
             fetch = FetchType.LAZY
     )
     @JoinTable(
@@ -38,8 +38,13 @@ public class HotelRoom {
 
     public HotelRoom(int numberOfBeds, Boolean hasPrivateToilet, Boolean isAvailable) {
         this.numberOfBeds = numberOfBeds;
-        this.hasPrivateToilet=hasPrivateToilet;
-        this.isAvailable=isAvailable;
+
+        this.hasPrivateToilet = hasPrivateToilet;
+        this.isAvailable = isAvailable;
+    }
+
+    public void emptyClients() {
+        this.clients.clear();
     }
 
 }

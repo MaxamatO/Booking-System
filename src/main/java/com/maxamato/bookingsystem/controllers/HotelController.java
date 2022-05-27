@@ -4,16 +4,13 @@ import com.maxamato.bookingsystem.dtos.HotelDto;
 import com.maxamato.bookingsystem.dtos.HotelRoomDto;
 import com.maxamato.bookingsystem.entities.Hotel;
 import com.maxamato.bookingsystem.entities.HotelRoom;
-import com.maxamato.bookingsystem.entities.requests.ClientRequest;
 import com.maxamato.bookingsystem.entities.requests.HotelRequest;
 import com.maxamato.bookingsystem.entities.requests.HotelRoomRequest;
-import com.maxamato.bookingsystem.services.ClientService;
 import com.maxamato.bookingsystem.services.HotelService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @RestController
@@ -62,7 +59,7 @@ public class HotelController {
     }
 
     @DeleteMapping("hotel/room/{roomId}/delete")
-    public HotelRoom deleteHotelRoom(@PathVariable Long roomId){
+    public String deleteHotelRoom(@PathVariable Long roomId){
         return hotelService.deleteHotelRoom(roomId);
     }
 

@@ -14,6 +14,7 @@ import lombok.Setter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import java.time.LocalDate;
@@ -59,21 +60,21 @@ public class ClientService {
 
         String whichAreBlank = blankFields(clientRequest);
 
-        if(!whichAreBlank.equals("Everything covered.")){
+        if (!whichAreBlank.equals("Everything covered.")) {
             throw new IllegalStateException(new Exception(whichAreBlank));
         }
 
         String password = clientRequest.getPassword();
 
-        if(!isValidEmailAddress(email)){
+        if (!isValidEmailAddress(email)) {
             throw new IllegalStateException(new Exception("Email not valid."));
         }
 
-        if(!isValidPassword(password)){
+        if (!isValidPassword(password)) {
             throw new IllegalStateException(new Exception("Password not valid"));
         }
 
-        if(!isValidDateOfBirth(clientRequest.getDateOfBirth())){
+        if (!isValidDateOfBirth(clientRequest.getDateOfBirth())) {
             throw new IllegalStateException(new Exception("Date of birth not valid"));
         }
 
@@ -147,7 +148,7 @@ public class ClientService {
                         ).collect(Collectors.toList()),
                         client.isAdult()
                 )
-                ).collect(Collectors.toList());
+        ).collect(Collectors.toList());
     }
 
     public List<ClientDto> findAllClientsAddress() {
@@ -182,49 +183,52 @@ public class ClientService {
         System.out.println(bCryptPasswordEncoder.encode(password));
         return bCryptPasswordEncoder.encode(password);
     }
+
     private boolean isValidEmailAddress(String email) {
         boolean result = true;
         try {
             InternetAddress emailAddress = new InternetAddress(email);
             emailAddress.validate();
-        }
-        catch (AddressException ex){
+        } catch (AddressException ex) {
             result = false;
         }
         return result;
     }
-    private boolean isValidPassword(String password){
+
+    private boolean isValidPassword(String password) {
         String upperCaseChars = "(.*[A-Z].*)";
         String lowerCaseChars = "(.*[a-z].*)";
         String specialSymbols = "(.*[@$%^&*()_#!].*)";
         String numbers = "(.*[0-9].*)";
 
-        if(password.length() < 8 || password.length() > 20){
+        if (password.length() < 8 || password.length() > 20) {
             throw new IllegalStateException(new Exception("Password must contain 8-20 characters."));
 
         }
 
-        if(!password.matches(upperCaseChars)){
+        if (!password.matches(upperCaseChars)) {
             throw new IllegalStateException(new Exception("Password must contain at least one upper case character."));
         }
 
-        if(!password.matches(lowerCaseChars)){
+        if (!password.matches(lowerCaseChars)) {
             throw new IllegalStateException(new Exception("Password can't contain only upper case characters."));
         }
 
-        if(!password.matches(specialSymbols)){
+        if (!password.matches(specialSymbols)) {
             throw new IllegalStateException(new Exception("Password must contain at least one special character."));
         }
 
-        if(!password.matches(numbers)){
+        if (!password.matches(numbers)) {
             throw new IllegalStateException(new Exception("Password must contain at least one number"));
         }
         return true;
     }
-    private boolean isValidDateOfBirth(LocalDate localDate){
+
+    private boolean isValidDateOfBirth(LocalDate localDate) {
         LocalDateTime todaysDate = LocalDateTime.now();
         return localDate.isBefore(ChronoLocalDate.from(todaysDate));
     }
+
     private String blankFields(ClientRequest clientRequest) {
         String email = clientRequest.getEmail();
         String password = clientRequest.getPassword();
@@ -235,33 +239,32 @@ public class ClientService {
         String postCode = clientRequest.getPostCode();
         String street = clientRequest.getStreet();
 
-        if(email == null){
+        if (email == null) {
             return "Email field can't be empty.";
         }
-        if(password == null){
+        if (password == null) {
             return "Password field can't be empty.";
         }
-        if(dateOfBirth == null){
+        if (dateOfBirth == null) {
             return "Date of birth field can't be empty.";
         }
-        if(city == null){
+        if (city == null) {
             return "City field can't be empty.";
         }
-        if(country == null){
+        if (country == null) {
             return "Country field can't be empty.";
         }
-        if(houseNumber == 0){
+        if (houseNumber == 0) {
             return "House number field can't be empty.";
         }
-        if(postCode == null){
+        if (postCode == null) {
             return "Postcode field can't be empty.";
         }
-        if(street == null){
+        if (street == null) {
             return "Street field can't be empty.";
         }
         return "Everything covered.";
     }
-
 
 
 }
