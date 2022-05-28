@@ -10,7 +10,7 @@ import lombok.Setter;
 public class BookingDto {
 
     private ClientDto client;
-    private HotelRoomDto hotelRoomDto;
+    private HotelRoomDto hotelRoom;
 
 
 
