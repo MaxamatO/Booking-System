@@ -20,32 +20,18 @@ public class HotelRoom {
     private Long id;
 
     private Boolean isAvailable = true;
-    private int numberOfBeds;
+    private Integer numberOfBeds;
     private Boolean hasPrivateToilet = false;
-
-    private int numberOfClients = 0;
-
-    @ManyToMany(
-            cascade = {CascadeType.ALL},
-            fetch = FetchType.LAZY
-    )
-    @JoinTable(
-            name = "hotel_room_client",
-            joinColumns = @JoinColumn(name = "hotel_room_id"),
-            inverseJoinColumns = @JoinColumn(name = "client_id")
-    )
-    private List<Client> clients = new ArrayList<>();
+    private Integer numberOfClients = 0;
 
     public HotelRoom(int numberOfBeds, Boolean hasPrivateToilet, Boolean isAvailable) {
         this.numberOfBeds = numberOfBeds;
-
         this.hasPrivateToilet = hasPrivateToilet;
         this.isAvailable = isAvailable;
     }
 
-    public void emptyClients() {
-        this.clients.clear();
+    public void addNumberOfClient(int i) {
+        this.numberOfClients += i;
     }
-
 }
 

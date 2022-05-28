@@ -18,7 +18,7 @@ public class Client {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long clientId;
+    private Long Id;
     private String email;
     private String password;
     @Column(name = "date_of_birth")
@@ -30,17 +30,6 @@ public class Client {
     private String country;
     private String city;
     private int houseNumber;
-
-    @OneToMany
-    @JoinColumn(name = "client_id")
-    private List<Booking> bookings;
-
-    @ManyToMany(
-            mappedBy = "clients",
-            cascade = {CascadeType.MERGE, CascadeType.PERSIST},
-            fetch = FetchType.LAZY
-    )
-    private List<HotelRoom> bookedRooms = new ArrayList<>();
 
     public Client(String email, String password, LocalDate dateOfBirth, String postCode, String street, String country, String city, int houseNumber) {
         this.email = email;
@@ -55,14 +44,17 @@ public class Client {
         this.houseNumber = houseNumber;
     }
 
-    public Client(String email, String password, LocalDate dateOfBirth, HotelRoom hotelRoom) {
+    public Client(String email, String password, LocalDate dateOfBirth) {
         this.email = email;
         this.password = password;
         this.dateOfBirth = dateOfBirth;
         this.isAdult = Period.between(dateOfBirth, LocalDate.now())
                 .getYears() >= 18;
-        bookedRooms.add(hotelRoom);
     }
+
+//    public Client(Booking booking){
+//        bookings.add(booking);
+//    }
 
     private Boolean isAdult(int years) {
         return years >= 18;
