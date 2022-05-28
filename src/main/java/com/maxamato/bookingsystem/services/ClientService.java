@@ -24,6 +24,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.chrono.ChronoLocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -37,23 +38,20 @@ public class ClientService {
     private final HotelRepository hotelRepository;
     private final BookingRepository bookingRepository;
 
-//    public List<ClientDto> findAllClients() {
-//        return clientRepository.findAll().stream().map(
-//                client -> new ClientDto(
-//                        client.getEmail(),
-//                        client.getDateOfBirth(),
-//                        client.getBookedRooms().stream().map(
-//                                hotelRoom -> new HotelRoomDto(
-//                                        hotelRoom.getIsAvailable(),
-//                                        hotelRoom.getNumberOfBeds(),
-//                                        hotelRoom.getHasPrivateToilet(),
-//                                        hotelRoom.getNumberOfClients()
-//                                )
-//                        ).collect(Collectors.toList()),
-//                        client.isAdult()
-//                )
-//        ).collect(Collectors.toList());
-//    }
+    public List<ClientDto> findAllClients() {
+        return clientRepository.findAll().stream().map(
+                client -> new ClientDto(
+                        client.getEmail(),
+                        client.getDateOfBirth(),
+                        client.isAdult(),
+                        client.getCountry(),
+                        client.getCity(),
+                        client.getStreet(),
+                        client.getPostCode(),
+                        client.getHouseNumber()
+                )
+        ).collect(Collectors.toList());
+    }
 
     public ClientDto addClient(ClientRequest clientRequest) {
         String email = clientRequest.getEmail();
@@ -120,7 +118,6 @@ public class ClientService {
         );
         HotelRoomDto hotelRoomDto = new HotelRoomDto(
                 hotelRoom.getId()
-//                hotelRoom.getNumberOfClients()
         );
 
         return new BookingDto(
@@ -130,24 +127,32 @@ public class ClientService {
 
     }
 
-    public List<Booking> findClientsRooms(Long clientId) {
-        return bookingRepository.findAllBookingsByClientId(clientId);
+    public List<BookingDto> findClientsRooms(Long clientId) {
+        return bookingRepository.findAllBookingsByClientId(clientId).stream().map(
+                booking -> new BookingDto(
+                        new ClientDto(
+                                booking.getClient().getEmail(),
+                                booking.getClient().getDateOfBirth()
+                                ),
+                        new HotelRoomDto(booking.getHotelRoom().getId())
+                )
+        ).collect(Collectors.toList());
     }
 
-//    public List<ClientDto> findAllClientsAddress() {
-//        return clientRepository.findAll().stream().map(
-//                client -> new ClientDto(
-//                        client.getEmail(),
-//                        client.getDateOfBirth(),
-//                        client.isAdult(),
-//                        client.getCountry(),
-//                        client.getCity(),
-//                        client.getStreet(),
-//                        client.getPostCode(),
-//                        client.getHouseNumber()
-//                )
-//        ).collect(Collectors.toList());
-//    }
+    public List<ClientDto> findAllClientsAddress() {
+        return clientRepository.findAll().stream().map(
+                client -> new ClientDto(
+                        client.getEmail(),
+                        client.getDateOfBirth(),
+                        client.isAdult(),
+                        client.getCountry(),
+                        client.getCity(),
+                        client.getStreet(),
+                        client.getPostCode(),
+                        client.getHouseNumber()
+                )
+        ).collect(Collectors.toList());
+    }
 //
 //    // Not implemented yet
 //    // Foreign key error
@@ -250,4 +255,19 @@ public class ClientService {
     }
 
 
+    public ClientDto findClient(Long clientId) {
+        if(!clientRepository.existsById(clientId)){
+            throw new IllegalStateException(new Exception("Use with provided id does not exist."));
+        }
+        return (ClientDto) clientRepository.findById(clientId).stream().map(client -> new ClientDto(
+                client.getEmail(),
+                client.getDateOfBirth(),
+                client.isAdult(),
+                client.getCountry(),
+                client.getCity(),
+                client.getStreet(),
+                client.getPostCode(),
+                client.getHouseNumber()
+        ));
+    }
 }

@@ -19,18 +19,23 @@ import java.util.stream.Collectors;
 public class ClientController {
     private final ClientService clientService;
 
-//    @GetMapping(path = "all")
-//    public List<ClientDto> findAllClients() {
-//        return clientService.findAllClients();
-//    }
+    @GetMapping(path = "all")
+    public List<ClientDto> findAllClients() {
+        return clientService.findAllClients();
+    }
 
-//    @GetMapping(path = "all/info")
-//    public List<ClientDto> findAllClientsWithAddress(){
-//        return clientService.findAllClientsAddress();
-//    }
-//
+    @GetMapping(path = "{clientId}")
+    public ClientDto findClient(@PathVariable Long clientId){
+        return clientService.findClient(clientId);
+    }
+
+    @GetMapping(path = "all/info")
+    public List<ClientDto> findAllClientsWithAddress(){
+        return clientService.findAllClientsAddress();
+    }
+
     @GetMapping(path = "{clientId}/all/rooms")
-    public List<Booking> findAllClientsRooms(@PathVariable Long clientId){
+    public List<BookingDto> findClientsRooms(@PathVariable Long clientId){
         return clientService.findClientsRooms(clientId);
     }
 
