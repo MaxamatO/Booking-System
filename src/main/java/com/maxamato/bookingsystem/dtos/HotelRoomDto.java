@@ -12,18 +12,19 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class HotelRoomDto {
 
+    private Long id;
     private Boolean isAvailable;
     private int numberOfBeds;
     private Boolean hasPrivateToilet;
     private int numberOfClients;
-    private List<ClientDto> clients;
+    private List<BookingDto> bookings;
 
-    public HotelRoomDto(Boolean isAvailable, int numberOfBeds, Boolean hasPrivateToilet, int numberOfClients, List<ClientDto> clients) {
+    public HotelRoomDto(Boolean isAvailable, int numberOfBeds, Boolean hasPrivateToilet, int numberOfClients, List<BookingDto> bookings) {
         this.isAvailable = isAvailable;
         this.numberOfBeds = numberOfBeds;
         this.hasPrivateToilet = hasPrivateToilet;
         this.numberOfClients = numberOfClients;
-        this.clients = clients;
+        this.bookings = bookings;
     }
 
     public HotelRoomDto(Boolean isAvailable, int numberOfBeds, Boolean hasPrivateToilet, int numberOfClients) {
@@ -32,4 +33,11 @@ public class HotelRoomDto {
         this.hasPrivateToilet = hasPrivateToilet;
         this.numberOfClients = numberOfClients;
     }
+
+    // TODO: Number of clients update only after another call of executeNumberOfClients
+    public HotelRoomDto(Long id){
+        this.id = id;
+//        this.numberOfClients = numberOfClients;
+    }
+
 }

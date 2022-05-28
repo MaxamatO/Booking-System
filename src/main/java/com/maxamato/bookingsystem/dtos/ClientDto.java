@@ -17,7 +17,7 @@ public class ClientDto {
 
     private String email;
     private LocalDate dateOfBirth;
-    private List<HotelRoomDto> hotelRooms;
+    private List<BookingDto> bookings;
     private Boolean isAdult;
     private String country;
     private String city;
@@ -26,13 +26,13 @@ public class ClientDto {
     private Integer houseNumber;
 
     public ClientDto(String email, LocalDate dateOfBirth,
-                     List<HotelRoomDto> hotelRooms, boolean isAdult,
+                     List<BookingDto> bookings, boolean isAdult,
                      String country, String city, String street,
                      String postCode, int houseNumber) {
 
         this.email = email;
         this.dateOfBirth = dateOfBirth;
-        this.hotelRooms = hotelRooms;
+        this.bookings = bookings;
         this.isAdult = isAdult;
         this.country = country;
         this.city = city;
@@ -58,11 +58,17 @@ public class ClientDto {
     }
 
     // ClientRoomsDto
-    public ClientDto(String email, LocalDate dateOfBirth, List<HotelRoomDto> hotelRooms, boolean isAdult){
+    public ClientDto(String email, LocalDate dateOfBirth, List<BookingDto> bookings, boolean isAdult){
         this.email = email;
         this.dateOfBirth = dateOfBirth;
-        this.hotelRooms = hotelRooms;
+        this.bookings = bookings;
         this.isAdult = isAdult;
+    }
+
+    // Client in Booking
+    public ClientDto(String email,LocalDate dateOfBirth){
+        this.email = email;
+        this.dateOfBirth = dateOfBirth;
     }
 
 }
