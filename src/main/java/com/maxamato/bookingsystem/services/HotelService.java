@@ -44,82 +44,64 @@ public class HotelService {
         return hotel;
     }
 
-    public HotelDto getHotel(Long id) {
-        return hotelRepository.findById(id).map(
-                hotel -> new HotelDto(
-                        hotel.getHotelName(),
-                        hotel.getCity(),
-                        hotel.getCountry(),
-                        hotel.getStars(),
-                        hotel.getNumberOfRooms(),
-                        hotel.getHotelRooms().stream().map(
-                                hotelRoom -> new HotelRoomDto(
-                                        hotelRoom.getIsAvailable(),
-                                        hotelRoom.getNumberOfBeds(),
-                                        hotelRoom.getHasPrivateToilet(),
-                                        hotelRoom.getNumberOfClients()
-                                )
-                        ).collect(Collectors.toList())
-                )).orElseThrow();
-    }
+//    public HotelDto getHotel(Long id) {
+//        return hotelRepository.findById(id).map(
+//                hotel -> new HotelDto(
+//                        hotel.getHotelName(),
+//                        hotel.getCity(),
+//                        hotel.getCountry(),
+//                        hotel.getStars(),
+//                        hotel.getNumberOfRooms(),
+//                        hotel.getHotelRooms().stream().map(
+//                                hotelRoom -> new HotelRoomDto(
+//                                        hotelRoom.getIsAvailable(),
+//                                        hotelRoom.getNumberOfBeds(),
+//                                        hotelRoom.getHasPrivateToilet(),
+//                                        hotelRoom.getNumberOfClients()
+//                                )
+//                        ).collect(Collectors.toList())
+//                )).orElseThrow();
+//    }
 
-    public List<HotelDto> getHotels() {
-        return hotelRepository.findAll().stream().map(
-                hotel -> new HotelDto(
-                        hotel.getHotelName(),
-                        hotel.getCity(),
-                        hotel.getCountry(),
-                        hotel.getStars(),
-                        hotel.getNumberOfRooms(),
-                        hotel.getHotelRooms().stream().map(
-                                hotelRoom -> new HotelRoomDto(
-                                        hotelRoom.getIsAvailable(),
-                                        hotelRoom.getNumberOfBeds(),
-                                        hotelRoom.getHasPrivateToilet(),
-                                        hotelRoom.getNumberOfClients()
+//    public List<HotelDto> getHotels() {
+//        return hotelRepository.findAll().stream().map(
+//                hotel -> new HotelDto(
+//                        hotel.getHotelName(),
+//                        hotel.getCity(),
+//                        hotel.getCountry(),
+//                        hotel.getStars(),
+//                        hotel.getNumberOfRooms(),
+//                        hotel.getHotelRooms().stream().map(
+//                                hotelRoom -> new HotelRoomDto(
+//                                        hotelRoom.getIsAvailable(),
+//                                        hotelRoom.getNumberOfBeds(),
+//                                        hotelRoom.getHasPrivateToilet(),
+//                                        hotelRoom.getNumberOfClients()
+//                                )
+//                        ).collect(Collectors.toList())
+//                )
+//        ).collect(Collectors.toList());
+//    }
 
-                                        // Adding hotelRoom.getClients() must be followed by another stream().map() and that gets pretty ugly
-                                        // TODO: Make it more functional and readable
-
-
-//                                        hotelRoom.getClients().stream().map(
-//                                                client -> new ClientDto(
-//                                                        client.getEmail(),
-//                                                        client.getDateOfBirth(),
-//                                                        client.isAdult(),
-//                                                        client.getCountry(),
-//                                                        client.getCity(),
-//                                                        client.getStreet(),
-//                                                        client.getPostCode(),
-//                                                        client.getHouseNumber()
-//                                                )
-//                                        ).collect(Collectors.toList())
-
-                                )
-                        ).collect(Collectors.toList())
-                )
-        ).collect(Collectors.toList());
-    }
-
-    public List<HotelDto> getHotelsFrom(String country) {
-        return hotelRepository.findAllByCountry(country).stream().map(
-                hotel -> new HotelDto(
-                        hotel.getHotelName(),
-                        hotel.getCity(),
-                        hotel.getCountry(),
-                        hotel.getStars(),
-                        hotel.getNumberOfRooms(),
-                        hotel.getHotelRooms().stream().map(
-                                hotelRoom -> new HotelRoomDto(
-                                        hotelRoom.getIsAvailable(),
-                                        hotelRoom.getNumberOfBeds(),
-                                        hotelRoom.getHasPrivateToilet(),
-                                        hotelRoom.getNumberOfClients()
-                                )
-                        ).collect(Collectors.toList())
-                )
-        ).collect(Collectors.toList());
-    }
+//    public List<HotelDto> getHotelsFrom(String country) {
+//        return hotelRepository.findAllByCountry(country).stream().map(
+//                hotel -> new HotelDto(
+//                        hotel.getHotelName(),
+//                        hotel.getCity(),
+//                        hotel.getCountry(),
+//                        hotel.getStars(),
+//                        hotel.getNumberOfRooms(),
+//                        hotel.getHotelRooms().stream().map(
+//                                hotelRoom -> new HotelRoomDto(
+//                                        hotelRoom.getIsAvailable(),
+//                                        hotelRoom.getNumberOfBeds(),
+//                                        hotelRoom.getHasPrivateToilet(),
+//                                        hotelRoom.getNumberOfClients()
+//                                )
+//                        ).collect(Collectors.toList())
+//                )
+//        ).collect(Collectors.toList());
+//    }
 
     public HotelRoom addHotelRoom(HotelRoomRequest hotelRoomRequest) {
         Hotel hotel = hotelRepository.findById(hotelRoomRequest.getHotelId()).orElseThrow(
@@ -138,55 +120,55 @@ public class HotelService {
 
     }
 
-    public List<HotelRoomDto> getAllHotelRooms() {
-        return hotelRoomRepository.findAll().stream().map(
-                hotelRoom -> new HotelRoomDto(
-                        hotelRoom.getIsAvailable(),
-                        hotelRoom.getNumberOfBeds(),
-                        hotelRoom.getHasPrivateToilet(),
-                        hotelRoom.getNumberOfClients(),
-                        hotelRoom.getClients().stream().map(
-                                client -> new ClientDto(
-                                        client.getEmail(),
-                                        client.getDateOfBirth(),
-                                        client.isAdult(),
-                                        client.getCountry(),
-                                        client.getCity(),
-                                        client.getStreet(),
-                                        client.getPostCode(),
-                                        client.getHouseNumber()
-                                )
-                        ).collect(Collectors.toList())
-                )
-        ).collect(Collectors.toList());
-    }
+//    public List<HotelRoomDto> getAllHotelRooms() {
+//        return hotelRoomRepository.findAll().stream().map(
+//                hotelRoom -> new HotelRoomDto(
+//                        hotelRoom.getIsAvailable(),
+//                        hotelRoom.getNumberOfBeds(),
+//                        hotelRoom.getHasPrivateToilet(),
+//                        hotelRoom.getNumberOfClients(),
+//                        hotelRoom.getClients().stream().map(
+//                                client -> new ClientDto(
+//                                        client.getEmail(),
+//                                        client.getDateOfBirth(),
+//                                        client.isAdult(),
+//                                        client.getCountry(),
+//                                        client.getCity(),
+//                                        client.getStreet(),
+//                                        client.getPostCode(),
+//                                        client.getHouseNumber()
+//                                )
+//                        ).collect(Collectors.toList())
+//                )
+//        ).collect(Collectors.toList());
+//    }
 
     // Not implemented yet
     // Foreign key error
-    public String deleteHotelRoom(Long roomId) {
-        if (!hotelRoomRepository.existsById(roomId)) {
-            throw new IllegalStateException(new Exception("Room with provided id does not exist"));
-        }
-        HotelRoom hotelRoom = hotelRoomRepository.findById(roomId).orElseThrow(() -> new IllegalStateException(
-                new Exception("Room with provided id does not exist"))
-        );
-        if (hotelRoom.getClients().isEmpty()) {
-            hotelRoomRepository.deleteById(roomId);
-            hotelRepository.executeNumberOfRoomsUpdate();
-            return "Deleted, no clients in it";
-        }
-        hotelRoom.emptyClients();
-        hotelRoomRepository.deleteById(roomId);
-        hotelRepository.executeNumberOfRoomsUpdate();
-        return "Deleted";
-    }
+//    public String deleteHotelRoom(Long roomId) {
+//        if (!hotelRoomRepository.existsById(roomId)) {
+//            throw new IllegalStateException(new Exception("Room with provided id does not exist"));
+//        }
+//        HotelRoom hotelRoom = hotelRoomRepository.findById(roomId).orElseThrow(() -> new IllegalStateException(
+//                new Exception("Room with provided id does not exist"))
+//        );
+//        if (hotelRoom.getClients().isEmpty()) {
+//            hotelRoomRepository.deleteById(roomId);
+//            hotelRepository.executeNumberOfRoomsUpdate();
+//            return "Deleted, no clients in it";
+//        }
+//        hotelRoom.emptyClients();
+//        hotelRoomRepository.deleteById(roomId);
+//        hotelRepository.executeNumberOfRoomsUpdate();
+//        return "Deleted";
+//    }
 
 
     // Not implemented yet
     // Foreign key error
-    public String deleteHotel(Long id) {
-//        hotelRepository.deleteById(id);
-
-        return "Deleted";
-    }
+//    public String deleteHotel(Long id) {
+////        hotelRepository.deleteById(id);
+//
+//        return "Deleted";
+//    }
 }

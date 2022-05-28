@@ -1,6 +1,8 @@
 package com.maxamato.bookingsystem.controllers;
 
+import com.maxamato.bookingsystem.dtos.BookingDto;
 import com.maxamato.bookingsystem.dtos.ClientDto;
+import com.maxamato.bookingsystem.entities.Booking;
 import com.maxamato.bookingsystem.entities.Client;
 import com.maxamato.bookingsystem.entities.HotelRoom;
 import com.maxamato.bookingsystem.entities.requests.ClientRequest;
@@ -17,19 +19,19 @@ import java.util.stream.Collectors;
 public class ClientController {
     private final ClientService clientService;
 
-    @GetMapping(path = "all")
-    public List<ClientDto> findAllClients() {
-        return clientService.findAllClients();
-    }
+//    @GetMapping(path = "all")
+//    public List<ClientDto> findAllClients() {
+//        return clientService.findAllClients();
+//    }
 
-    @GetMapping(path = "all/info")
-    public List<ClientDto> findAllClientsWithAddress(){
-        return clientService.findAllClientsAddress();
-    }
-
-    @GetMapping(path = "all/rooms")
-    public List<ClientDto> findAllClientsWithRooms(){
-        return clientService.findAllClientsRooms();
+//    @GetMapping(path = "all/info")
+//    public List<ClientDto> findAllClientsWithAddress(){
+//        return clientService.findAllClientsAddress();
+//    }
+//
+    @GetMapping(path = "{clientId}/all/rooms")
+    public List<Booking> findAllClientsRooms(@PathVariable Long clientId){
+        return clientService.findClientsRooms(clientId);
     }
 
     @PostMapping(path = "add")
@@ -38,14 +40,14 @@ public class ClientController {
     }
 
     @PutMapping(path = "{clientId}/rooms/{roomId}/add")
-    public ClientDto addClientToHotelRoom(@PathVariable Long clientId, @PathVariable Long roomId) {
+    public BookingDto addClientToHotelRoom(@PathVariable Long clientId, @PathVariable Long roomId) {
         return clientService.addClientToHotelRoom(clientId, roomId);
     }
 
-    @DeleteMapping(path = "{clientEmail}/delete")
-    public String deleteClient(@PathVariable String clientEmail) {
-        return clientService.deleteClient(clientEmail);
-    }
+//    @DeleteMapping(path = "{clientEmail}/delete")
+//    public String deleteClient(@PathVariable String clientEmail) {
+//        return clientService.deleteClient(clientEmail);
+//    }
 
 
 }

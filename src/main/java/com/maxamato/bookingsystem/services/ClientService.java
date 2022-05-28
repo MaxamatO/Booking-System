@@ -1,10 +1,13 @@
 package com.maxamato.bookingsystem.services;
 
+import com.maxamato.bookingsystem.dtos.BookingDto;
 import com.maxamato.bookingsystem.dtos.ClientDto;
 import com.maxamato.bookingsystem.dtos.HotelRoomDto;
+import com.maxamato.bookingsystem.entities.Booking;
 import com.maxamato.bookingsystem.entities.Client;
 import com.maxamato.bookingsystem.entities.HotelRoom;
 import com.maxamato.bookingsystem.entities.requests.ClientRequest;
+import com.maxamato.bookingsystem.repository.BookingRepository;
 import com.maxamato.bookingsystem.repository.ClientRepository;
 import com.maxamato.bookingsystem.repository.HotelRepository;
 import com.maxamato.bookingsystem.repository.HotelRoomRepository;
@@ -21,7 +24,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.chrono.ChronoLocalDate;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -33,24 +35,25 @@ public class ClientService {
     private final ClientRepository clientRepository;
     private final HotelRoomRepository hotelRoomRepository;
     private final HotelRepository hotelRepository;
+    private final BookingRepository bookingRepository;
 
-    public List<ClientDto> findAllClients() {
-        return clientRepository.findAll().stream().map(
-                client -> new ClientDto(
-                        client.getEmail(),
-                        client.getDateOfBirth(),
-                        client.getBookedRooms().stream().map(
-                                hotelRoom -> new HotelRoomDto(
-                                        hotelRoom.getIsAvailable(),
-                                        hotelRoom.getNumberOfBeds(),
-                                        hotelRoom.getHasPrivateToilet(),
-                                        hotelRoom.getNumberOfClients()
-                                )
-                        ).collect(Collectors.toList()),
-                        client.isAdult()
-                )
-        ).collect(Collectors.toList());
-    }
+//    public List<ClientDto> findAllClients() {
+//        return clientRepository.findAll().stream().map(
+//                client -> new ClientDto(
+//                        client.getEmail(),
+//                        client.getDateOfBirth(),
+//                        client.getBookedRooms().stream().map(
+//                                hotelRoom -> new HotelRoomDto(
+//                                        hotelRoom.getIsAvailable(),
+//                                        hotelRoom.getNumberOfBeds(),
+//                                        hotelRoom.getHasPrivateToilet(),
+//                                        hotelRoom.getNumberOfClients()
+//                                )
+//                        ).collect(Collectors.toList()),
+//                        client.isAdult()
+//                )
+//        ).collect(Collectors.toList());
+//    }
 
     public ClientDto addClient(ClientRequest clientRequest) {
         String email = clientRequest.getEmail();
@@ -104,78 +107,58 @@ public class ClientService {
     }
 
 
-    public ClientDto addClientToHotelRoom(Long clientId, Long roomId) {
-        if (!hotelRoomRepository.existsById(roomId)) {
-            throw new IllegalStateException(new Exception("Room with provided id does not exist"));
-        }
-        HotelRoom hotelRoom = hotelRoomRepository.findById(roomId).orElseThrow(() -> new IllegalStateException(new Exception("Hotel room does not exist")));
-        if (!clientRepository.existsById(clientId)) {
-            throw new IllegalStateException(new Exception("Client with provided id does not exist"));
-        }
-        Client client = clientRepository.findById(clientId).orElseThrow(() -> new IllegalStateException(new Exception("Client does not exist")));
-        client.getBookedRooms().add(hotelRoom);
-        hotelRoom.getClients().add(client);
+    public BookingDto addClientToHotelRoom(Long clientId, Long roomId) {
+
+        Client client = clientRepository.findById(clientId).orElseThrow(() -> new IllegalStateException(new Exception("User with provided id does not exist")));
+        HotelRoom hotelRoom = hotelRoomRepository.findById(roomId).orElseThrow(() -> new IllegalStateException(new Exception("Room with provided id does not exist")));
+        Booking booking = new Booking(client, hotelRoom);
+        bookingRepository.save(booking);
         hotelRoomRepository.executeNumberOfClientsUpdate();
+        ClientDto clientDto = new ClientDto(
+                client.getEmail(),
+                client.getDateOfBirth()
+        );
+        HotelRoomDto hotelRoomDto = new HotelRoomDto(
+                hotelRoom.getId()
+//                hotelRoom.getNumberOfClients()
+        );
 
-        return clientRepository.findById(clientId).map(client1 -> new ClientDto(
-                client1.getEmail(),
-                client1.getDateOfBirth(),
-                client1.getBookedRooms().stream().map(
-                        hR -> new HotelRoomDto(
-                                hR.getIsAvailable(),
-                                hR.getNumberOfBeds(),
-                                hR.getHasPrivateToilet(),
-                                hR.getNumberOfClients()
-                        )
-                ).collect(Collectors.toList()),
-                client1.isAdult()
-        )).orElseThrow(() -> new IllegalStateException(new Exception("Client does not exist")));
+        return new BookingDto(
+                clientDto,
+                hotelRoomDto
+        );
 
     }
 
-    public List<ClientDto> findAllClientsRooms() {
-        return clientRepository.findAll().stream().map(
-                client -> new ClientDto(
-                        client.getEmail(),
-                        client.getDateOfBirth(),
-                        client.getBookedRooms().stream().map(
-                                hotelRoom -> new HotelRoomDto(
-                                        hotelRoom.getIsAvailable(),
-                                        hotelRoom.getNumberOfBeds(),
-                                        hotelRoom.getHasPrivateToilet(),
-                                        hotelRoom.getNumberOfClients()
-                                )
-                        ).collect(Collectors.toList()),
-                        client.isAdult()
-                )
-        ).collect(Collectors.toList());
+    public List<Booking> findClientsRooms(Long clientId) {
+        return bookingRepository.findAllBookingsByClientId(clientId);
     }
 
-    public List<ClientDto> findAllClientsAddress() {
-        return clientRepository.findAll().stream().map(
-                client -> new ClientDto(
-                        client.getEmail(),
-                        client.getDateOfBirth(),
-                        client.isAdult(),
-                        client.getCountry(),
-                        client.getCity(),
-                        client.getStreet(),
-                        client.getPostCode(),
-                        client.getHouseNumber()
-                )
-        ).collect(Collectors.toList());
-    }
-
-    // Not implemented yet
-    // Foreign key error
-    public String deleteClient(String clientEmail) {
-        if (!clientRepository.existsByEmail(clientEmail)) {
-            throw new IllegalStateException(new Exception("Client does not exist."));
-        }
-        Long clientId = clientRepository.findByEmail(clientEmail).getClientId();
-        clientRepository.deleteById(clientId);
-        return String.format("Client with id %s got deleted", clientId);
-    }
+//    public List<ClientDto> findAllClientsAddress() {
+//        return clientRepository.findAll().stream().map(
+//                client -> new ClientDto(
+//                        client.getEmail(),
+//                        client.getDateOfBirth(),
+//                        client.isAdult(),
+//                        client.getCountry(),
+//                        client.getCity(),
+//                        client.getStreet(),
+//                        client.getPostCode(),
+//                        client.getHouseNumber()
+//                )
+//        ).collect(Collectors.toList());
+//    }
+//
+//    // Not implemented yet
+//    // Foreign key error
+//    public String deleteClient(String clientEmail) {
+//        if (!clientRepository.existsByEmail(clientEmail)) {
+//            throw new IllegalStateException(new Exception("Client does not exist."));
+//        }
+//        Long clientId = clientRepository.findByEmail(clientEmail).getClientId();
+//        clientRepository.deleteById(clientId);
+//        return String.format("Client with id %s got deleted", clientId);
+//    }
 
     // PRIVATE FUNCTIONS USED FOR CHECKING CREDENTIALS
     private String encode(String password) {

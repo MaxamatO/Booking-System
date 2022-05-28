@@ -25,25 +25,25 @@ public class HotelController {
         return hotelService.addHotel(hotelRequest);
     }
 
-    @GetMapping(path = "hotels/all")
-    public List<HotelDto> getHotels(){
-        return hotelService.getHotels();
-    }
+//    @GetMapping(path = "hotels/all")
+//    public List<HotelDto> getHotels(){
+//        return hotelService.getHotels();
+//    }
 
-    @GetMapping(path = "hotels/from/")
-    public List<HotelDto> getHotelsFrom(@RequestParam(name = "country") String country){
-        return hotelService.getHotelsFrom(country);
-    }
+//    @GetMapping(path = "hotels/from/")
+//    public List<HotelDto> getHotelsFrom(@RequestParam(name = "country") String country){
+//        return hotelService.getHotelsFrom(country);
+//    }
 
-    @GetMapping(path = "hotels/")
-    public HotelDto getHotel(@RequestParam(name = "id") Long id){
-        return hotelService.getHotel(id);
-    }
+//    @GetMapping(path = "hotels/")
+//    public HotelDto getHotel(@RequestParam(name = "id") Long id){
+//        return hotelService.getHotel(id);
+//    }
 
-    @DeleteMapping(path = "hotel/{hotel_id}/delete")
-    public String deleteHotel(@PathVariable(name = "hotel_id") Long id){
-        return hotelService.deleteHotel(id);
-    }
+//    @DeleteMapping(path = "hotel/{hotel_id}/delete")
+//    public String deleteHotel(@PathVariable(name = "hotel_id") Long id){
+//        return hotelService.deleteHotel(id);
+//    }
 
     // ****** HOTEL ROOM PART *******
 
@@ -53,14 +53,14 @@ public class HotelController {
 
     }
 
-    @GetMapping("hotel/rooms/all")
-    public List<HotelRoomDto> getAllHotelRooms(){
-        return hotelService.getAllHotelRooms();
-    }
+//    @GetMapping("hotel/rooms/all")
+//    public List<HotelRoomDto> getAllHotelRooms(){
+//        return hotelService.getAllHotelRooms();
+//    }
 
-    @DeleteMapping("hotel/room/{roomId}/delete")
-    public String deleteHotelRoom(@PathVariable Long roomId){
-        return hotelService.deleteHotelRoom(roomId);
-    }
+//    @DeleteMapping("hotel/room/{roomId}/delete")
+//    public String deleteHotelRoom(@PathVariable Long roomId){
+//        return hotelService.deleteHotelRoom(roomId);
+//    }
 
 }
