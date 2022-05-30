@@ -21,7 +21,7 @@ public class HotelController {
     // ****** HOTEL PART *******
 
     @PostMapping(path = "hotel/add")
-    public Hotel addHotel(@RequestBody HotelRequest hotelRequest){
+    public HotelDto addHotel(@RequestBody HotelRequest hotelRequest){
         return hotelService.addHotel(hotelRequest);
     }
 
@@ -48,7 +48,7 @@ public class HotelController {
     // ****** HOTEL ROOM PART *******
 
     @PostMapping("hotel/room/add")
-    public HotelRoom addHotelRoom(@RequestBody HotelRoomRequest hotelRoomRequest){
+    public HotelRoomDto addHotelRoom(@RequestBody HotelRoomRequest hotelRoomRequest){
         return hotelService.addHotelRoom(hotelRoomRequest);
 
     }
