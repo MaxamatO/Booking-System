@@ -3,10 +3,8 @@ package com.maxamato.bookingsystem.services;
 import com.maxamato.bookingsystem.dtos.ClientDto;
 import com.maxamato.bookingsystem.dtos.HotelDto;
 import com.maxamato.bookingsystem.dtos.HotelRoomDto;
-import com.maxamato.bookingsystem.entities.Client;
 import com.maxamato.bookingsystem.entities.Hotel;
 import com.maxamato.bookingsystem.entities.HotelRoom;
-import com.maxamato.bookingsystem.entities.requests.ClientRequest;
 import com.maxamato.bookingsystem.entities.requests.HotelRequest;
 import com.maxamato.bookingsystem.entities.requests.HotelRoomRequest;
 import com.maxamato.bookingsystem.repository.BookingRepository;
@@ -34,7 +32,7 @@ public class HotelService {
     private final ClientRepository clientRepository;
     private final BookingRepository bookingRepository;
 
-    public Hotel addHotel(HotelRequest hotelRequest) {
+    public HotelDto addHotel(HotelRequest hotelRequest) {
         Hotel hotel = new Hotel(
                 hotelRequest.getHotelName(),
                 hotelRequest.getCity(),
@@ -43,7 +41,13 @@ public class HotelService {
                 hotelRequest.getIsAvailableOnSummer());
 
         hotelRepository.save(hotel);
-        return hotel;
+        return new HotelDto(
+                hotel.getHotelName(),
+                hotel.getCity(),
+                hotel.getCountry(),
+                hotel.getStars(),
+                hotel.getNumberOfRooms()
+        );
     }
 
     public HotelDto getHotel(Long id) {
@@ -105,7 +109,7 @@ public class HotelService {
         ).collect(Collectors.toList());
     }
 
-    public HotelRoom addHotelRoom(HotelRoomRequest hotelRoomRequest) {
+    public HotelRoomDto addHotelRoom(HotelRoomRequest hotelRoomRequest) {
         Hotel hotel = hotelRepository.findById(hotelRoomRequest.getHotelId()).orElseThrow(
                 () -> new IllegalStateException(new Exception(
                         "Hotel with provided id does not exist."
@@ -118,7 +122,13 @@ public class HotelService {
         hotel.addHotelRoom(hotelRoom);
         hotelRoomRepository.save(hotelRoom);
         hotelRepository.executeNumberOfRoomsUpdate();
-        return hotelRoom;
+        return new HotelRoomDto(
+                hotelRoom.getIsAvailable(),
+                hotelRoom.getNumberOfClients(),
+                hotelRoom.getHasPrivateToilet(),
+                hotelRoom.getNumberOfBeds()
+
+        );
 
     }
 
@@ -142,10 +152,7 @@ public class HotelService {
     public List<HotelRoomDto> getAllHotelRooms() {
         return hotelRoomRepository.findAll().stream().map(
                 hotelRoom -> new HotelRoomDto(
-                        hotelRoom.getIsAvailable(),
-                        hotelRoom.getNumberOfBeds(),
-                        hotelRoom.getHasPrivateToilet(),
-                        hotelRoom.getNumberOfClients()
+                        hotelRoom.getId()
                 )
         ).collect(Collectors.toList());
     }
