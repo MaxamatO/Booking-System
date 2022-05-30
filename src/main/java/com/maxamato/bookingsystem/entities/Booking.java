@@ -12,8 +12,6 @@ import javax.persistence.*;
 @NoArgsConstructor
 public class Booking {
 
-    // TODO: Client 1:M Booking M:1 HotelRoom, restructure all the code
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
