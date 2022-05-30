@@ -35,8 +35,8 @@ public class ClientController {
     }
 
     @GetMapping(path = "{clientId}/all/rooms")
-    public List<BookingDto> findClientsRooms(@PathVariable Long clientId){
-        return clientService.findClientsRooms(clientId);
+    public List<BookingDto> getBookingsForAClient(@PathVariable Long clientId){
+        return clientService.getBookingsForAClient(clientId);
     }
 
     @PostMapping(path = "add")
