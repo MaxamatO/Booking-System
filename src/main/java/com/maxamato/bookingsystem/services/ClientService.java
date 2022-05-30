@@ -23,6 +23,8 @@ import javax.mail.internet.InternetAddress;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.chrono.ChronoLocalDate;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -127,13 +129,17 @@ public class ClientService {
 
     }
 
-    public List<BookingDto> findClientsRooms(Long clientId) {
-        return bookingRepository.findAllBookingsByClientId(clientId).stream().map(
+    public List<BookingDto> getBookingsForAClient(Long clientId) {
+        if(!clientRepository.existsById(clientId)){
+            throw new IllegalStateException(new Exception("User with provided id does not exist."));
+        }
+        List<Booking> bookings = bookingRepository.findAllBookingsByClientId(clientId);
+        return bookings.stream().map(
                 booking -> new BookingDto(
                         new ClientDto(
                                 booking.getClient().getEmail(),
                                 booking.getClient().getDateOfBirth()
-                                ),
+                        ),
                         new HotelRoomDto(booking.getHotelRoom().getId())
                 )
         ).collect(Collectors.toList());
@@ -152,6 +158,23 @@ public class ClientService {
                         client.getHouseNumber()
                 )
         ).collect(Collectors.toList());
+    }
+    public ClientDto findClient(Long clientId) {
+        if(!clientRepository.existsById(clientId)){
+            throw new IllegalStateException(new Exception("Use with provided id does not exist."));
+        }
+        Client client = clientRepository.findById(clientId).get();
+        ClientDto clientDto = new ClientDto(
+                client.getEmail(),
+                client.getDateOfBirth(),
+                client.isAdult(),
+                client.getCountry(),
+                client.getCity(),
+                client.getStreet(),
+                client.getPostCode(),
+                client.getHouseNumber()
+        );
+        return clientDto;
     }
 //
 //    // Not implemented yet
@@ -254,20 +277,4 @@ public class ClientService {
         return "Everything covered.";
     }
 
-
-    public ClientDto findClient(Long clientId) {
-        if(!clientRepository.existsById(clientId)){
-            throw new IllegalStateException(new Exception("Use with provided id does not exist."));
-        }
-        return (ClientDto) clientRepository.findById(clientId).stream().map(client -> new ClientDto(
-                client.getEmail(),
-                client.getDateOfBirth(),
-                client.isAdult(),
-                client.getCountry(),
-                client.getCity(),
-                client.getStreet(),
-                client.getPostCode(),
-                client.getHouseNumber()
-        ));
-    }
 }
