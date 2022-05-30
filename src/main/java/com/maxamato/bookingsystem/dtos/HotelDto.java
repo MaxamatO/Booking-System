@@ -1,5 +1,6 @@
 package com.maxamato.bookingsystem.dtos;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.maxamato.bookingsystem.entities.Hotel;
 import com.maxamato.bookingsystem.entities.HotelRoom;
 import lombok.Getter;
@@ -9,6 +10,7 @@ import java.util.List;
 
 @Getter
 @Setter
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class HotelDto {
 
     private String hotelName;
@@ -26,6 +28,15 @@ public class HotelDto {
         this.stars = stars;
         this.numberOfRooms = numberOfRooms;
         this.hotelRooms = hotelRooms;
+    }
+
+    public HotelDto(String hotelName, String city, String country,
+                    Integer stars, int numberOfRooms){
+        this.hotelName = hotelName;
+        this.city = city;
+        this.country = country;
+        this.stars = stars;
+        this.numberOfRooms = numberOfRooms;
     }
 
 
