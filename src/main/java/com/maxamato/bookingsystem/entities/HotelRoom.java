@@ -29,9 +29,5 @@ public class HotelRoom {
         this.hasPrivateToilet = hasPrivateToilet;
         this.isAvailable = isAvailable;
     }
-
-    public void addNumberOfClient(int i) {
-        this.numberOfClients += i;
-    }
 }
 

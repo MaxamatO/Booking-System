@@ -16,12 +16,10 @@ public class HotelRoomDto {
 
     private Long id;
     private Boolean isAvailable;
-    private int numberOfBeds;
+    private Integer numberOfBeds;
     private Boolean hasPrivateToilet;
-    private int numberOfClients;
+    private Integer numberOfClients;
     private List<BookingDto> bookings;
-    // TODO: It's getting duplicated somehow
-    private List<ClientDto> clients = new ArrayList<>();
 
     public HotelRoomDto(Boolean isAvailable, int numberOfBeds, Boolean hasPrivateToilet, int numberOfClients, List<BookingDto> bookings) {
         this.isAvailable = isAvailable;
@@ -39,19 +37,15 @@ public class HotelRoomDto {
     }
 
     public HotelRoomDto(List<ClientDto> clientsDtos, int numberOfBeds, int numberOfClients){
-        addClient(clientsDtos);
         this.numberOfClients = numberOfClients;
         this.numberOfBeds = numberOfBeds;
     }
 
     // TODO: Number of clients update only after another call of executeNumberOfClients
-    public HotelRoomDto(Long id){
-        this.id = id;
+    public HotelRoomDto(Long Id){
+        this.id = Id;
 //        this.numberOfClients = numberOfClients;
     }
 
-    public void addClient(List<ClientDto> clientsDtos){
-        this.clients.addAll(clientsDtos);
-    }
 
 }
