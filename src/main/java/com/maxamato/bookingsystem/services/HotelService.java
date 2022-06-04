@@ -3,6 +3,8 @@ package com.maxamato.bookingsystem.services;
 import com.maxamato.bookingsystem.dtos.ClientDto;
 import com.maxamato.bookingsystem.dtos.HotelDto;
 import com.maxamato.bookingsystem.dtos.HotelRoomDto;
+import com.maxamato.bookingsystem.entities.Booking;
+import com.maxamato.bookingsystem.entities.Client;
 import com.maxamato.bookingsystem.entities.Hotel;
 import com.maxamato.bookingsystem.entities.HotelRoom;
 import com.maxamato.bookingsystem.entities.requests.HotelRequest;
@@ -17,6 +19,7 @@ import lombok.Setter;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -124,29 +127,37 @@ public class HotelService {
         hotelRepository.executeNumberOfRoomsUpdate();
         return new HotelRoomDto(
                 hotelRoom.getIsAvailable(),
-                hotelRoom.getNumberOfClients(),
+                hotelRoom.getNumberOfBeds(),
                 hotelRoom.getHasPrivateToilet(),
-                hotelRoom.getNumberOfBeds()
+                hotelRoom.getNumberOfClients()
 
         );
 
     }
 
+    // TODO: ERROR - Client 'disappears' after adding him to multiple rooms
     public HotelRoomDto getHotelRoomById(Long roomId){
         HotelRoom hotelRoom = hotelRoomRepository.findById(roomId).orElseThrow(() -> new IllegalStateException(
                 new Exception("Room with provided id does not exist")
         ));
-        List<ClientDto> clients = bookingRepository.findAllClientsIntoDto(roomId).stream().map(
+        List<Long> clientsIds = bookingRepository.findAllClientsIntoDto(roomId);
+        System.out.println(clientsIds.isEmpty());
+        List<Client> clients = new ArrayList<>(clientRepository.findAllById(clientsIds));
+        System.out.println(clients.isEmpty());
+        List<ClientDto> clientDtos = clients.stream().map(
                 client -> new ClientDto(
                         client.getEmail(),
                         client.getDateOfBirth()
                 )
         ).collect(Collectors.toList());
+
         return new HotelRoomDto(
-                clients,
+                clientDtos,
                 hotelRoom.getNumberOfBeds(),
-                hotelRoom.getNumberOfClients()
+                hotelRoom.getNumberOfClients(),
+                hotelRoom.getId()
         );
+
     }
 
     public List<HotelRoomDto> getAllHotelRooms() {
@@ -156,6 +167,8 @@ public class HotelService {
                 )
         ).collect(Collectors.toList());
     }
+
+    // TODO: Implement this bs finally
 
     // Not implemented yet
     // Foreign key error
@@ -177,6 +190,8 @@ public class HotelService {
 //        return "Deleted";
 //    }
 
+
+    // TODO: Implement this bs finally
 
     // Not implemented yet
     // Foreign key error
