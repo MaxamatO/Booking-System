@@ -108,7 +108,10 @@ public class ClientService {
 
 
     public BookingDto addClientToHotelRoom(Long clientId, Long roomId) {
-
+        long count = bookingRepository.getCountOfClients(clientId, roomId);
+        if(count >= 1){
+            throw new IllegalStateException(new Exception("This room is already booked for this user."));
+        }
         Client client = clientRepository.findById(clientId).orElseThrow(() -> new IllegalStateException(new Exception("User with provided id does not exist")));
         HotelRoom hotelRoom = hotelRoomRepository.findById(roomId).orElseThrow(() -> new IllegalStateException(new Exception("Room with provided id does not exist")));
         Booking booking = new Booking(client, hotelRoom);
@@ -126,7 +129,6 @@ public class ClientService {
                 clientDto,
                 hotelRoomDto
         );
-
     }
 
     public List<BookingDto> getBookingsForAClient(Long clientId) {
@@ -176,6 +178,7 @@ public class ClientService {
         );
         return clientDto;
     }
+    // TODO: Implement this bs finally
 //
 //    // Not implemented yet
 //    // Foreign key error
