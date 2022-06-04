@@ -17,7 +17,7 @@ public class HotelDto {
     private String city;
     private String country;
     private Integer stars;
-    private int numberOfRooms;
+    private Integer numberOfRooms;
     private List<HotelRoomDto> hotelRooms;
 
     public HotelDto(String hotelName, String city, String country,

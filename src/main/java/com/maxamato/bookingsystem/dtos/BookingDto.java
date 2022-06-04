@@ -1,6 +1,7 @@
 package com.maxamato.bookingsystem.dtos;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.maxamato.bookingsystem.entities.Booking;
 import com.maxamato.bookingsystem.entities.HotelRoom;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,4 +16,6 @@ import java.util.List;
 public class BookingDto {
     private ClientDto client;
     private HotelRoomDto hotelRoom;
+
+
 }
