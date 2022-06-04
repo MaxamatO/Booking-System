@@ -20,6 +20,8 @@ public class HotelRoomDto {
     private Boolean hasPrivateToilet;
     private Integer numberOfClients;
     private List<BookingDto> bookings;
+    private Long hotelId;
+    private List<ClientDto> clients;
 
     public HotelRoomDto(Boolean isAvailable, int numberOfBeds, Boolean hasPrivateToilet, int numberOfClients, List<BookingDto> bookings) {
         this.isAvailable = isAvailable;
@@ -36,15 +38,22 @@ public class HotelRoomDto {
         this.numberOfClients = numberOfClients;
     }
 
-    public HotelRoomDto(List<ClientDto> clientsDtos, int numberOfBeds, int numberOfClients){
+    public HotelRoomDto(List<ClientDto> clients, int numberOfBeds, int numberOfClients, Long hotelId){
+        this.clients = clients;
         this.numberOfClients = numberOfClients;
         this.numberOfBeds = numberOfBeds;
+        this.hotelId = hotelId;
+//        System.out.println(this.clients.isEmpty());
     }
 
     // TODO: Number of clients update only after another call of executeNumberOfClients
     public HotelRoomDto(Long Id){
         this.id = Id;
 //        this.numberOfClients = numberOfClients;
+    }
+
+    public void addClient(List<ClientDto> clientDtos){
+        clients = new ArrayList<>(clientDtos);
     }
 
 
