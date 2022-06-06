@@ -33,4 +33,27 @@ public class CustomizedBookingRepositoryImpl implements CustomizedBookingReposit
 //        return clientTypedQuery.getResultList();
 //    }
 
+    @Override
+    public void deleteAllByHotelRoomId(List<Long> ids){
+        String sql = "delete from Booking where Booking.hotel_room_id in :ids";
+        Query q = entityManager.createNativeQuery(sql);
+        q.setParameter("ids", ids);
+        q.executeUpdate();
+    }
+
+    @Override
+    public void deleteByHotelRoomId(Long id) {
+        String sql = "delete from Booking where Booking.hotel_room_id = :id";
+        Query query = entityManager.createNativeQuery(sql);
+        query.setParameter("id", id);
+        query.executeUpdate();
+    }
+
+    @Override
+    public void deleteByClientId(Long id) {
+        String sql = "delete from Booking where Booking.client_id = :id";
+        Query query = entityManager.createNativeQuery(sql);
+        query.setParameter("id", id);
+        query.executeUpdate();
+    }
 }

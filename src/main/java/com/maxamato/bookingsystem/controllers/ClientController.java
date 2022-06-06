@@ -49,10 +49,10 @@ public class ClientController {
         return clientService.addClientToHotelRoom(clientId, roomId);
     }
 
-//    @DeleteMapping(path = "{clientEmail}/delete")
-//    public String deleteClient(@PathVariable String clientEmail) {
-//        return clientService.deleteClient(clientEmail);
-//    }
+    @DeleteMapping(path = "{clientEmail}/delete")
+    public String deleteClient(@PathVariable String clientEmail) {
+        return clientService.deleteClient(clientEmail);
+    }
 
 
 }

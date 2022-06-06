@@ -165,36 +165,30 @@ public class HotelService {
         ).collect(Collectors.toList());
     }
 
-    // TODO: Implement this bs finally
 
-    // Not implemented yet
-    // Foreign key error
-//    public String deleteHotelRoom(Long roomId) {
-//        if (!hotelRoomRepository.existsById(roomId)) {
-//            throw new IllegalStateException(new Exception("Room with provided id does not exist"));
-//        }
-//        HotelRoom hotelRoom = hotelRoomRepository.findById(roomId).orElseThrow(() -> new IllegalStateException(
-//                new Exception("Room with provided id does not exist"))
-//        );
-//        if (hotelRoom.getClients().isEmpty()) {
-//            hotelRoomRepository.deleteById(roomId);
-//            hotelRepository.executeNumberOfRoomsUpdate();
-//            return "Deleted, no clients in it";
-//        }
-//        hotelRoom.emptyClients();
-//        hotelRoomRepository.deleteById(roomId);
-//        hotelRepository.executeNumberOfRoomsUpdate();
-//        return "Deleted";
-//    }
+    public String deleteHotelRoom(Long roomId) {
+        if(!hotelRoomRepository.existsById(roomId)){
+            throw new IllegalStateException(new Exception(
+                    "Hotel room with provided id can't be deleted - doesn't exist."
+            ));
+        }
+        bookingRepository.deleteByHotelRoomId(roomId);
+        hotelRoomRepository.deleteById(roomId);
+        return String.format("Hotel room with id: %s got deleted.", roomId);
+    }
 
 
-    // TODO: Implement this bs finally
 
-    // Not implemented yet
-    // Foreign key error
-//    public String deleteHotel(Long id) {
-////        hotelRepository.deleteById(id);
-//
-//        return "Deleted";
-//    }
+    public String deleteHotel(Long id) {
+        if(!hotelRepository.existsById(id)){
+            throw new IllegalStateException(new Exception(
+                    "Hotel with provided id can't be deleted - doesn't exist."
+            ));
+        }
+        List<HotelRoom> hotelRooms = hotelRoomRepository.findByHotelId(id);
+        List<Long> ids = hotelRooms.stream().map(HotelRoom::getId).collect(Collectors.toList());
+        bookingRepository.deleteAllByHotelRoomId(ids);
+        hotelRepository.deleteById(id);
+        return String.format("Hotel with ID: %s got deleted", id);
+    }
 }

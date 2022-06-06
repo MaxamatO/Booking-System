@@ -179,17 +179,20 @@ public class ClientService {
         return clientDto;
     }
     // TODO: Implement this bs finally
-//
-//    // Not implemented yet
-//    // Foreign key error
-//    public String deleteClient(String clientEmail) {
-//        if (!clientRepository.existsByEmail(clientEmail)) {
-//            throw new IllegalStateException(new Exception("Client does not exist."));
-//        }
-//        Long clientId = clientRepository.findByEmail(clientEmail).getClientId();
-//        clientRepository.deleteById(clientId);
-//        return String.format("Client with id %s got deleted", clientId);
-//    }
+
+    // Not implemented yet
+    // Foreign key error
+    public String deleteClient(String clientEmail) {
+        if(!clientRepository.existsByEmail(clientEmail)){
+            throw new IllegalStateException(new Exception(
+                    "Client provided email can't be deleted - doesn't exist."
+            ));
+        }
+        Long id = clientRepository.findByEmail(clientEmail).getId();
+        bookingRepository.deleteByClientId(id);
+        clientRepository.deleteById(id);
+        return String.format("Client with email address: %s got deleted", clientEmail);
+    }
 
     // PRIVATE FUNCTIONS USED FOR CHECKING CREDENTIALS
     private String encode(String password) {

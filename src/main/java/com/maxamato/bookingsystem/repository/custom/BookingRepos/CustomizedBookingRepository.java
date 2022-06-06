@@ -8,6 +8,10 @@ public interface CustomizedBookingRepository {
 
     List<Booking> findAllBookingsByClientId(Long clientId);
 
-//    List<Long> findAllClientsIntoDto(Long roomId);
+    void deleteAllByHotelRoomId(List<Long> ids);
+
+    void deleteByHotelRoomId(Long id);
+
+    void deleteByClientId(Long id);
 
 }

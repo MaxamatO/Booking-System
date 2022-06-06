@@ -40,10 +40,10 @@ public class HotelController {
         return hotelService.getHotel(id);
     }
 
-//    @DeleteMapping(path = "hotel/{hotel_id}/delete")
-//    public String deleteHotel(@PathVariable(name = "hotel_id") Long id){
-//        return hotelService.deleteHotel(id);
-//    }
+    @DeleteMapping(path = "hotel/{hotel_id}/delete")
+    public String deleteHotel(@PathVariable(name = "hotel_id") Long id){
+        return hotelService.deleteHotel(id);
+    }
 
     // ****** HOTEL ROOM PART *******
 
@@ -63,9 +63,9 @@ public class HotelController {
         return hotelService.getAllHotelRooms();
     }
 
-//    @DeleteMapping("hotel/room/{roomId}/delete")
-//    public String deleteHotelRoom(@PathVariable Long roomId){
-//        return hotelService.deleteHotelRoom(roomId);
-//    }
+    @DeleteMapping("hotel/room/{roomId}/delete")
+    public String deleteHotelRoom(@PathVariable Long roomId){
+        return hotelService.deleteHotelRoom(roomId);
+    }
 
 }
