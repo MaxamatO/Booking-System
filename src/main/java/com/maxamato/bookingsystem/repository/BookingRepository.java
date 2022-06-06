@@ -12,7 +12,7 @@ import java.util.List;
 public interface BookingRepository extends JpaRepository<Booking, Long>, CustomizedBookingRepository {
     List<Booking> findAllBookingsByClientId(Long clientId);
 
-    @Query(value = "select * from booking where booking.hotel_room_id = ?1", nativeQuery = true)
+    @Query(value = "select client_id from booking where booking.hotel_room_id = ?1", nativeQuery = true)
     List<Long> findAllClientsIntoDto(Long roomId);
 
     @Query(value = "SELECT COUNT(client_id) FROM Booking  WHERE Booking.client_id=?1 AND Booking.hotel_room_id=?2", nativeQuery = true)
