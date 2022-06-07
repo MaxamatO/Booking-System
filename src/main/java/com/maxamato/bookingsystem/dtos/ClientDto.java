@@ -1,13 +1,10 @@
 package com.maxamato.bookingsystem.dtos;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.maxamato.bookingsystem.entities.Client;
-import com.maxamato.bookingsystem.entities.HotelRoom;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -24,22 +21,7 @@ public class ClientDto {
     private String street;
     private String postCode;
     private Integer houseNumber;
-
-    public ClientDto(String email, LocalDate dateOfBirth,
-                     List<BookingDto> bookings, boolean isAdult,
-                     String country, String city, String street,
-                     String postCode, int houseNumber) {
-
-        this.email = email;
-        this.dateOfBirth = dateOfBirth;
-        this.bookings = bookings;
-        this.isAdult = isAdult;
-        this.country = country;
-        this.city = city;
-        this.street = street;
-        this.postCode = postCode;
-        this.houseNumber = houseNumber;
-    }
+    private List<HotelRoomDto> hotelRooms;
 
     //ClientAddressDto
     public ClientDto(String email, LocalDate dateOfBirth,
@@ -57,20 +39,20 @@ public class ClientDto {
         this.houseNumber = houseNumber;
     }
 
-    // ClientRoomsDto
-    public ClientDto(String email, LocalDate dateOfBirth, List<BookingDto> bookings, boolean isAdult){
+
+
+    public ClientDto(String email,LocalDate dateOfBirth, List<HotelRoomDto> hotelRooms){
         this.email = email;
         this.dateOfBirth = dateOfBirth;
-        this.bookings = bookings;
-        this.isAdult = isAdult;
+        this.hotelRooms = hotelRooms;
+
     }
 
     // Client in Booking
-    public ClientDto(String email,LocalDate dateOfBirth){
+    public ClientDto(String email,LocalDate dateOfBirth) {
         this.email = email;
         this.dateOfBirth = dateOfBirth;
     }
-
 }
 
 

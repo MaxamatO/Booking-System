@@ -23,8 +23,6 @@ import javax.mail.internet.InternetAddress;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.chrono.ChronoLocalDate;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -131,20 +129,21 @@ public class ClientService {
         );
     }
 
-    public List<BookingDto> getBookingsForAClient(Long clientId) {
-        if(!clientRepository.existsById(clientId)){
-            throw new IllegalStateException(new Exception("User with provided id does not exist."));
-        }
+    public ClientDto getBookingsForAClient(Long clientId) {
+        Client client = clientRepository.findById(clientId).orElseThrow(()->
+                new IllegalStateException(new Exception("User with provided id does not exist.")));
         List<Booking> bookings = bookingRepository.findAllBookingsByClientId(clientId);
-        return bookings.stream().map(
-                booking -> new BookingDto(
-                        new ClientDto(
-                                booking.getClient().getEmail(),
-                                booking.getClient().getDateOfBirth()
-                        ),
-                        new HotelRoomDto(booking.getHotelRoom().getId())
-                )
-        ).collect(Collectors.toList());
+        List<HotelRoom> hotelRooms = bookings.stream().map(Booking::getHotelRoom).collect(Collectors.toList());
+
+        return new ClientDto(
+                client.getEmail(),
+                client.getDateOfBirth(),
+                hotelRooms.stream().map(
+                        hotelRoom -> new HotelRoomDto(
+                                hotelRoom.getId()
+                        )
+                ).collect(Collectors.toList())
+                );
     }
 
     public List<ClientDto> findAllClientsAddress() {
@@ -162,11 +161,12 @@ public class ClientService {
         ).collect(Collectors.toList());
     }
     public ClientDto findClient(Long clientId) {
-        if(!clientRepository.existsById(clientId)){
-            throw new IllegalStateException(new Exception("Use with provided id does not exist."));
-        }
-        Client client = clientRepository.findById(clientId).get();
-        ClientDto clientDto = new ClientDto(
+        Client client = clientRepository.findById(clientId).orElseThrow(
+                () -> new IllegalStateException(
+                        new Exception("Use with provided id does not exist.")
+                )
+        );
+        return new ClientDto(
                 client.getEmail(),
                 client.getDateOfBirth(),
                 client.isAdult(),
@@ -176,12 +176,8 @@ public class ClientService {
                 client.getPostCode(),
                 client.getHouseNumber()
         );
-        return clientDto;
     }
-    // TODO: Implement this bs finally
 
-    // Not implemented yet
-    // Foreign key error
     public String deleteClient(String clientEmail) {
         if(!clientRepository.existsByEmail(clientEmail)){
             throw new IllegalStateException(new Exception(

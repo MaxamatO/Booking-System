@@ -2,16 +2,12 @@ package com.maxamato.bookingsystem.controllers;
 
 import com.maxamato.bookingsystem.dtos.BookingDto;
 import com.maxamato.bookingsystem.dtos.ClientDto;
-import com.maxamato.bookingsystem.entities.Booking;
-import com.maxamato.bookingsystem.entities.Client;
-import com.maxamato.bookingsystem.entities.HotelRoom;
 import com.maxamato.bookingsystem.entities.requests.ClientRequest;
 import com.maxamato.bookingsystem.services.ClientService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @RestController
@@ -35,7 +31,7 @@ public class ClientController {
     }
 
     @GetMapping(path = "{clientId}/all/rooms")
-    public List<BookingDto> getBookingsForAClient(@PathVariable Long clientId){
+    public ClientDto getBookingsForAClient(@PathVariable Long clientId){
         return clientService.getBookingsForAClient(clientId);
     }
 
