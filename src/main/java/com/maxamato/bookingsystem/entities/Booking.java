@@ -5,6 +5,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.LocalDate;
+import java.time.Period;
 
 @Entity
 @Setter
@@ -22,9 +24,17 @@ public class Booking {
     @ManyToOne
     private HotelRoom hotelRoom;
 
+    private LocalDate bookedAt = LocalDate.now();
+    private LocalDate accommodationDate;
+    private LocalDate evictionDate;
+    private Integer totalAmountOfNights;
 
-    public Booking(Client client, HotelRoom hotelRoom) {
+
+    public Booking(Client client, HotelRoom hotelRoom, LocalDate accommodationDate, LocalDate evictionDate) {
         this.client = client;
         this.hotelRoom = hotelRoom;
+        this.accommodationDate = accommodationDate;
+        this.evictionDate = evictionDate;
+        this.totalAmountOfNights = Period.between(accommodationDate, evictionDate).getDays();
     }
 }

@@ -160,7 +160,8 @@ public class HotelService {
     public List<HotelRoomDto> getAllHotelRooms() {
         return hotelRoomRepository.findAll().stream().map(
                 hotelRoom -> new HotelRoomDto(
-                        hotelRoom.getId()
+                        hotelRoom.getId(),
+                        hotelRoom.getIsAvailable()
                 )
         ).collect(Collectors.toList());
     }

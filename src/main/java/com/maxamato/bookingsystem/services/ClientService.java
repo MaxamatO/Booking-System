@@ -6,6 +6,7 @@ import com.maxamato.bookingsystem.dtos.HotelRoomDto;
 import com.maxamato.bookingsystem.entities.Booking;
 import com.maxamato.bookingsystem.entities.Client;
 import com.maxamato.bookingsystem.entities.HotelRoom;
+import com.maxamato.bookingsystem.entities.requests.BookingRequest;
 import com.maxamato.bookingsystem.entities.requests.ClientRequest;
 import com.maxamato.bookingsystem.repository.BookingRepository;
 import com.maxamato.bookingsystem.repository.ClientRepository;
@@ -105,14 +106,21 @@ public class ClientService {
     }
 
 
-    public BookingDto addClientToHotelRoom(Long clientId, Long roomId) {
+    public BookingDto addClientToHotelRoom(BookingRequest bookingRequest) {
+        Long clientId = bookingRequest.getClientId();
+        Long roomId = bookingRequest.getRoomId();
         long count = bookingRepository.getCountOfClients(clientId, roomId);
         if(count >= 1){
             throw new IllegalStateException(new Exception("This room is already booked for this user."));
         }
         Client client = clientRepository.findById(clientId).orElseThrow(() -> new IllegalStateException(new Exception("User with provided id does not exist")));
         HotelRoom hotelRoom = hotelRoomRepository.findById(roomId).orElseThrow(() -> new IllegalStateException(new Exception("Room with provided id does not exist")));
-        Booking booking = new Booking(client, hotelRoom);
+        Booking booking = new Booking(
+                client,
+                hotelRoom,
+                bookingRequest.getAccommodationDate(),
+                bookingRequest.getEvictionDate()
+                );
         bookingRepository.save(booking);
         hotelRoomRepository.executeNumberOfClientsUpdate();
         ClientDto clientDto = new ClientDto(
@@ -120,7 +128,8 @@ public class ClientService {
                 client.getDateOfBirth()
         );
         HotelRoomDto hotelRoomDto = new HotelRoomDto(
-                hotelRoom.getId()
+                hotelRoom.getId(),
+                booking.getTotalAmountOfNights()
         );
 
         return new BookingDto(
@@ -134,13 +143,15 @@ public class ClientService {
                 new IllegalStateException(new Exception("User with provided id does not exist.")));
         List<Booking> bookings = bookingRepository.findAllBookingsByClientId(clientId);
         List<HotelRoom> hotelRooms = bookings.stream().map(Booking::getHotelRoom).collect(Collectors.toList());
+        List<Integer> nights = bookings.stream().map(Booking::getTotalAmountOfNights).collect(Collectors.toList());
 
         return new ClientDto(
                 client.getEmail(),
                 client.getDateOfBirth(),
                 hotelRooms.stream().map(
                         hotelRoom -> new HotelRoomDto(
-                                hotelRoom.getId()
+                                hotelRoom.getId(),
+                                nights.remove(0)
                         )
                 ).collect(Collectors.toList())
                 );

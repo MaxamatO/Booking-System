@@ -18,6 +18,7 @@ public class HotelRoomDto {
     private Integer numberOfClients;
     private Long hotelId;
     private List<ClientDto> clients;
+    private Integer totalAmountOfNights;
 
 
     public HotelRoomDto(Boolean isAvailable, int numberOfBeds, Boolean hasPrivateToilet, int numberOfClients) {
@@ -32,14 +33,17 @@ public class HotelRoomDto {
         this.numberOfClients = numberOfClients;
         this.numberOfBeds = numberOfBeds;
         this.hotelId = hotelId;
-//        System.out.println(this.clients.isEmpty());
     }
 
     // TODO: Number of clients update only after another call of executeNumberOfClients
-    public HotelRoomDto(Long Id){
+    public HotelRoomDto(Long Id, Integer totalAmountOfNights){
         this.id = Id;
-//        this.numberOfClients = numberOfClients;
+        this.totalAmountOfNights = totalAmountOfNights;
     }
 
 
+    public HotelRoomDto(Long id, Boolean isAvailable) {
+        this.id = id;
+        this.isAvailable = isAvailable;
+    }
 }
