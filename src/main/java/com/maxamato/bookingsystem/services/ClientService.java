@@ -98,9 +98,9 @@ public class ClientService {
                 client.getDateOfBirth(),
                 client.isAdult(),
                 client.getCountry(),
+                client.getPostCode(),
                 client.getCity(),
                 client.getStreet(),
-                client.getPostCode(),
                 client.getHouseNumber()
         );
     }
@@ -204,7 +204,6 @@ public class ClientService {
     // PRIVATE FUNCTIONS USED FOR CHECKING CREDENTIALS
     private String encode(String password) {
         BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
-        System.out.println(bCryptPasswordEncoder.encode(password));
         return bCryptPasswordEncoder.encode(password);
     }
 
