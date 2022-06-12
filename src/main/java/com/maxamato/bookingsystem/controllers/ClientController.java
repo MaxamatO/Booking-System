@@ -8,6 +8,7 @@ import com.maxamato.bookingsystem.services.ClientService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import javax.websocket.server.PathParam;
 import java.util.List;
 
 @AllArgsConstructor
@@ -22,8 +23,8 @@ public class ClientController {
     }
 
     @GetMapping(path = "{clientId}")
-    public ClientDto findClient(@PathVariable Long clientId) {
-        return clientService.findClient(clientId);
+    public ClientDto findClient(@PathParam("email") String email) {
+        return clientService.findClientByEmail(email);
     }
 
     @GetMapping(path = "all/info")
