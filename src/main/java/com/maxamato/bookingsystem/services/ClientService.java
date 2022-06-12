@@ -171,8 +171,8 @@ public class ClientService {
                 )
         ).collect(Collectors.toList());
     }
-    public ClientDto findClient(Long clientId) {
-        Client client = clientRepository.findById(clientId).orElseThrow(
+    public ClientDto findClientByEmail(String email) {
+        Client client = clientRepository.findByEmail(email).orElseThrow(
                 () -> new IllegalStateException(
                         new Exception("Use with provided id does not exist.")
                 )
@@ -195,7 +195,10 @@ public class ClientService {
                     "Client provided email can't be deleted - doesn't exist."
             ));
         }
-        Long id = clientRepository.findByEmail(clientEmail).getId();
+        Long id = clientRepository.findByEmail(clientEmail).orElseThrow(
+                () -> new IllegalStateException(new Exception(
+                "Client provided email can't be deleted - doesn't exist."
+        ))).getId();
         bookingRepository.deleteByClientId(id);
         clientRepository.deleteById(id);
         return String.format("Client with email address: %s got deleted", clientEmail);
