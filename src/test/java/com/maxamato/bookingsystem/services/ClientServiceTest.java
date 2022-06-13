@@ -8,47 +8,32 @@ import com.maxamato.bookingsystem.entities.Hotel;
 import com.maxamato.bookingsystem.entities.HotelRoom;
 import com.maxamato.bookingsystem.entities.requests.BookingRequest;
 import com.maxamato.bookingsystem.entities.requests.ClientRequest;
-import com.maxamato.bookingsystem.repository.BookingRepository;
-import com.maxamato.bookingsystem.repository.ClientRepository;
-import com.maxamato.bookingsystem.repository.HotelRepository;
-import com.maxamato.bookingsystem.repository.HotelRoomRepository;
-import org.checkerframework.checker.units.qual.C;
-import org.junit.Assert;
-import org.junit.Before;
+import com.maxamato.bookingsystem.entities.requests.HotelRequest;
+import com.maxamato.bookingsystem.entities.requests.HotelRoomRequest;
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.*;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-
-import javax.persistence.Entity;
-import javax.transaction.Transactional;
+import org.junit.jupiter.params.provider.Arguments;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.time.LocalDate;
-import java.util.Optional;
+import java.util.List;
+import java.util.stream.Stream;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 
-@ExtendWith(MockitoExtension.class)
-@ExtendWith(SpringExtension.class)
+
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
+@ActiveProfiles("test")
 class ClientServiceTest {
 
-    @MockBean
-    private ClientRepository clientRepository;
-    @MockBean
-    private HotelRoomRepository hotelRoomRepository;
-    @MockBean
-    private HotelRepository hotelRepository;
-    @MockBean
-    private BookingRepository bookingRepository;
-    @InjectMocks
+
+    @Autowired
     private ClientService underTest;
 
+    @Autowired
+    private HotelService hotelService;
 
     private Hotel hotel;
     private HotelRoom hotelRoom;
@@ -57,7 +42,6 @@ class ClientServiceTest {
 
     @BeforeEach
     void setUp() {
-        underTest = new ClientService(clientRepository, hotelRoomRepository, hotelRepository, bookingRepository);
 
         hotel = new Hotel();
         hotel.setHotelName("Marriott");
@@ -76,12 +60,13 @@ class ClientServiceTest {
 
         client = new Client();
         client.setId(1L);
-        client.setEmail("test@gmail.com");
+        client.setEmail("defaultclient@gmail.com");
         client.setCity("Paris");
         client.setCountry("France");
         client.setDateOfBirth(LocalDate.of(2000, 3, 15));
         client.setPostCode("23-444");
         client.setPassword("Password12!");
+        client.setStreet("Baker Street");
         client.setHouseNumber(44);
 
         booking = new Booking();
@@ -94,26 +79,18 @@ class ClientServiceTest {
     }
 
     @Test
-    void canFindAllClients() {
-        // when
-        underTest.findAllClients();
-        // then
-        verify(clientRepository).findAll();
-    }
-
-    @Test
+    @Disabled
     void canAddClient() {
         // given
-        final String email = "test@gmail.com";
         ClientRequest clientRequest = new ClientRequest(
-                email,
-                "Password12!",
-                LocalDate.of(2000, 3, 15),
-                "France",
-                "23-444",
-                "Paris",
-                "something",
-                44
+                client.getEmail(),
+                client.getPassword(),
+                client.getDateOfBirth(),
+                client.getPostCode(),
+                client.getStreet(),
+                client.getCountry(),
+                client.getCity(),
+                client.getHouseNumber()
         );
         // when
         ClientDto clientDto = underTest.addClient(clientRequest);
@@ -134,35 +111,86 @@ class ClientServiceTest {
     }
 
     @Test
-    @Transactional
     void canAddClientToHotelRoom() {
         // given
-        BookingRequest bookingRequest = new BookingRequest(booking.getClient().getId(), booking.getHotelRoom().getId(),
-                booking.getAccommodationDate(), booking.getEvictionDate()
+        ClientRequest clientRequest = new ClientRequest(
+                client.getEmail(),
+                client.getPassword(),
+                client.getDateOfBirth(),
+                client.getPostCode(),
+                client.getStreet(),
+                client.getCountry(),
+                client.getCity(),
+                client.getHouseNumber()
+        );
+        underTest.addClient(clientRequest);
+        BookingRequest bookingRequest = new BookingRequest(
+                booking.getClient().getId(),
+                booking.getHotelRoom().getId(),
+                booking.getAccommodationDate(),
+                booking.getEvictionDate()
+
                 );
+        hotelService.addHotel(
+                new HotelRequest(
+                        hotel.getHotelName(),
+                        hotel.getCity(),
+                        hotel.getCountry(),
+                        hotel.getStars(),
+                        hotel.getIsAvailableOnSummer()
+                )
+        );
+
+        hotelService.addHotelRoom(
+                new HotelRoomRequest(
+                        hotelRoom.getNumberOfBeds(),
+                        hotel.getId()
+                )
+        );
         // when
-        clientRepository.save(client);
-        hotelRepository.save(hotel);
-        hotelRoomRepository.save(hotelRoom);
+
         BookingDto bookingDto = underTest.addClientToHotelRoom(bookingRequest);
 
         // then
-//        Client client = clientRepository.findByEmail(bookingDto.getClient().getEmail()).get();
-//        assertEquals(bookingRequest.getClientId(), client.getId());
+        assertEquals(booking.getClient().getEmail(), bookingDto.getClient().getEmail());
+
     }
+
+
 
     @Test
     void findClientByEmail() {
         // given
-        String email = "test@gmail.com";
-        Mockito.when(clientRepository.findByEmail(email)).thenReturn(Optional.of(client));
-
+        underTest.addClient(
+                new ClientRequest(
+                        client.getEmail(),
+                        client.getPassword(),
+                        client.getDateOfBirth(),
+                        client.getPostCode(),
+                        client.getStreet(),
+                        client.getCountry(),
+                        client.getCity(),
+                        client.getHouseNumber()
+                )
+        );
         // when
-        ClientDto clientTest = underTest.findClientByEmail(email);
-
+        ClientDto clientTest = underTest.findClientByEmail(client.getEmail());
         // then
         Assertions.assertNotNull(client);
         assertEquals(client.getEmail(), clientTest.getEmail());
+        assertEquals(client.getCity(), clientTest.getCity());
+        assertEquals(client.getCountry(), clientTest.getCountry());
+        assertEquals(client.getHouseNumber(), clientTest.getHouseNumber());
+        assertEquals(client.getStreet(), clientTest.getStreet());
+        assertEquals(client.getPostCode(), clientTest.getPostCode());
+        assertEquals(client.getDateOfBirth(), clientTest.getDateOfBirth());
+    }
 
+    static Stream<Arguments> findClientByEmailData(){
+        ClientServiceTest clientServiceTest = new ClientServiceTest();
+        return Stream.of(
+                Arguments.of(clientServiceTest.client.getEmail(), true),
+                Arguments.of("notexistingemail@gmail.com", true)
+        );
     }
 }
