@@ -26,8 +26,8 @@ public class ClientDto {
     //ClientAddressDto
     public ClientDto(String email, LocalDate dateOfBirth,
                      boolean isAdult,
-                     String country, String postCode, String city,
-                     String street, int houseNumber) {
+                     String country, String city, String street,
+                     String postCode, int houseNumber) {
 
         this.email = email;
         this.dateOfBirth = dateOfBirth;

@@ -98,9 +98,9 @@ public class ClientService {
                 client.getDateOfBirth(),
                 client.isAdult(),
                 client.getCountry(),
-                client.getPostCode(),
                 client.getCity(),
                 client.getStreet(),
+                client.getPostCode(),
                 client.getHouseNumber()
         );
     }
@@ -174,7 +174,7 @@ public class ClientService {
     public ClientDto findClientByEmail(String email) {
         Client client = clientRepository.findByEmail(email).orElseThrow(
                 () -> new IllegalStateException(
-                        new Exception("Use with provided id does not exist.")
+                        new Exception("Use with provided email does not exist.")
                 )
         );
         return new ClientDto(
