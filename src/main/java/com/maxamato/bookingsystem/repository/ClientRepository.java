@@ -12,6 +12,6 @@ public interface ClientRepository extends JpaRepository<Client, Long>{
 
     boolean existsByEmail(String email);
 
-    @Query(value = "select * from Client c where c.email = ?1")
+    @Query(value = "select * from Client c where c.email = ?1", nativeQuery = true)
     Optional<Client> findByEmail(String email);
 }
