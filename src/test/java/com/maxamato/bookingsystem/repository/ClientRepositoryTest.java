@@ -69,7 +69,7 @@ class ClientRepositoryTest {
         underTest.save(client);
         underTest.save(client2);
         // when
-        Client expected = underTest.findByEmail(email);
+        Client expected = underTest.findByEmail(email).get();
         // then
         assertThat(expected).isEqualTo(client);
 
