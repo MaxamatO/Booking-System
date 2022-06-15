@@ -12,9 +12,12 @@ import com.maxamato.bookingsystem.repository.BookingRepository;
 import com.maxamato.bookingsystem.repository.ClientRepository;
 import com.maxamato.bookingsystem.repository.HotelRepository;
 import com.maxamato.bookingsystem.repository.HotelRoomRepository;
+import com.maxamato.bookingsystem.utils.PasswordValidator;
+import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.security.core.parameters.P;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,6 +26,7 @@ import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Period;
 import java.time.chrono.ChronoLocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -71,13 +75,15 @@ public class ClientService {
         if (!isValidEmailAddress(email)) {
             throw new IllegalStateException(new Exception("Email not valid."));
         }
-
-        if (!isValidPassword(password)) {
-            throw new IllegalStateException(new Exception("Password not valid"));
-        }
+        PasswordValidator passwordValidator = new PasswordValidator();
+        passwordValidator.test(password);
 
         if (!isValidDateOfBirth(clientRequest.getDateOfBirth())) {
             throw new IllegalStateException(new Exception("Date of birth not valid"));
+        }
+
+        if(!isSixteenOrOlder(clientRequest.getDateOfBirth())){
+            throw new IllegalStateException(new Exception("You must be at least 16 years old to make an account"));
         }
 
         String encodedPassword = encode(password);
@@ -104,6 +110,8 @@ public class ClientService {
                 client.getHouseNumber()
         );
     }
+
+
 
 
     public BookingDto addClientToHotelRoom(BookingRequest bookingRequest) {
@@ -138,6 +146,8 @@ public class ClientService {
         );
     }
 
+
+    // TODO: Test it
     public ClientDto getBookingsForAClient(Long clientId) {
         Client client = clientRepository.findById(clientId).orElseThrow(()->
                 new IllegalStateException(new Exception("User with provided id does not exist.")));
@@ -157,6 +167,7 @@ public class ClientService {
                 );
     }
 
+    // TODO: Test it
     public List<ClientDto> findAllClientsAddress() {
         return clientRepository.findAll().stream().map(
                 client -> new ClientDto(
@@ -171,10 +182,11 @@ public class ClientService {
                 )
         ).collect(Collectors.toList());
     }
+
     public ClientDto findClientByEmail(String email) {
         Client client = clientRepository.findByEmail(email).orElseThrow(
                 () -> new IllegalStateException(
-                        new Exception("Use with provided email does not exist.")
+                        new Exception("User with provided email does not exist.")
                 )
         );
         return new ClientDto(
@@ -221,33 +233,8 @@ public class ClientService {
         return result;
     }
 
-    private boolean isValidPassword(String password) {
-        String upperCaseChars = "(.*[A-Z].*)";
-        String lowerCaseChars = "(.*[a-z].*)";
-        String specialSymbols = "(.*[@$%^&*()_#!].*)";
-        String numbers = "(.*[0-9].*)";
-
-        if (password.length() < 8 || password.length() > 20) {
-            throw new IllegalStateException(new Exception("Password must contain 8-20 characters."));
-
-        }
-
-        if (!password.matches(upperCaseChars)) {
-            throw new IllegalStateException(new Exception("Password must contain at least one upper case character."));
-        }
-
-        if (!password.matches(lowerCaseChars)) {
-            throw new IllegalStateException(new Exception("Password can't contain only upper case characters."));
-        }
-
-        if (!password.matches(specialSymbols)) {
-            throw new IllegalStateException(new Exception("Password must contain at least one special character."));
-        }
-
-        if (!password.matches(numbers)) {
-            throw new IllegalStateException(new Exception("Password must contain at least one number"));
-        }
-        return true;
+    private boolean isSixteenOrOlder(LocalDate dateOfBirth) {
+        return Period.between(dateOfBirth, LocalDate.now()).getYears() >= 16;
     }
 
     private boolean isValidDateOfBirth(LocalDate localDate) {
