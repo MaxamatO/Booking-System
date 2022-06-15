@@ -146,8 +146,6 @@ public class ClientService {
         );
     }
 
-
-    // TODO: Test it
     public ClientDto getBookingsForAClient(Long clientId) {
         Client client = clientRepository.findById(clientId).orElseThrow(()->
                 new IllegalStateException(new Exception("User with provided id does not exist.")));

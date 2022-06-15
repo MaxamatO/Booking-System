@@ -2,6 +2,7 @@ package com.maxamato.bookingsystem.services;
 
 import com.maxamato.bookingsystem.dtos.BookingDto;
 import com.maxamato.bookingsystem.dtos.ClientDto;
+import com.maxamato.bookingsystem.dtos.HotelRoomDto;
 import com.maxamato.bookingsystem.entities.Booking;
 import com.maxamato.bookingsystem.entities.Client;
 import com.maxamato.bookingsystem.entities.Hotel;
@@ -17,6 +18,7 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -202,4 +204,48 @@ class ClientServiceTest {
     }
 
 
+    @Test
+    void getBookingsForAClient() {
+        // given
+        ClientRequest clientRequest = new ClientRequest(
+                client.getEmail(),
+                client.getPassword(),
+                client.getDateOfBirth(),
+                client.getPostCode(),
+                client.getStreet(),
+                client.getCountry(),
+                client.getCity(),
+                client.getHouseNumber()
+        );
+        underTest.addClient(clientRequest);
+        BookingRequest bookingRequest = new BookingRequest(
+                booking.getClient().getId(),
+                booking.getHotelRoom().getId(),
+                booking.getAccommodationDate(),
+                booking.getEvictionDate()
+        );
+        hotelService.addHotel(
+                new HotelRequest(
+                        hotel.getHotelName(),
+                        hotel.getCity(),
+                        hotel.getCountry(),
+                        hotel.getStars(),
+                        hotel.getIsAvailableOnSummer()
+                )
+        );
+        hotelService.addHotelRoom(
+                new HotelRoomRequest(
+                        hotelRoom.getNumberOfBeds(),
+                        hotel.getId()
+                )
+        );
+        underTest.addClientToHotelRoom(bookingRequest);
+        // when
+        ClientDto bookingsForAClient = underTest.getBookingsForAClient(client.getId());
+
+        // then
+        assertEquals(client.getEmail(), bookingsForAClient.getEmail());
+        assertEquals(client.getDateOfBirth(), bookingsForAClient.getDateOfBirth());
+
+    }
 }
