@@ -14,7 +14,6 @@ public class ClientDto {
 
     private String email;
     private LocalDate dateOfBirth;
-    private List<BookingDto> bookings;
     private Boolean isAdult;
     private String country;
     private String city;
