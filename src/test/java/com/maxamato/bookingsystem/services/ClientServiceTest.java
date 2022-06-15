@@ -11,21 +11,19 @@ import com.maxamato.bookingsystem.entities.requests.ClientRequest;
 import com.maxamato.bookingsystem.entities.requests.HotelRequest;
 import com.maxamato.bookingsystem.entities.requests.HotelRoomRequest;
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.params.provider.Arguments;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.time.LocalDate;
-import java.util.List;
-import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
-
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 @ActiveProfiles("test")
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 class ClientServiceTest {
 
 
@@ -79,7 +77,6 @@ class ClientServiceTest {
     }
 
     @Test
-    @Disabled
     void canAddClient() {
         // given
         ClientRequest clientRequest = new ClientRequest(
@@ -106,8 +103,27 @@ class ClientServiceTest {
     }
 
     @Test
-    @Disabled
     void deleteClient() {
+        ClientRequest clientRequest = new ClientRequest(
+                client.getEmail(),
+                client.getPassword(),
+                client.getDateOfBirth(),
+                client.getPostCode(),
+                client.getStreet(),
+                client.getCountry(),
+                client.getCity(),
+                client.getHouseNumber()
+        );
+        underTest.addClient(clientRequest);
+        String s = underTest.deleteClient(clientRequest.getEmail());
+        assertThat(s).isEqualTo(String.format("Client with email address: %s got deleted", client.getEmail()));
+        Exception exception = assertThrows(IllegalStateException.class, () -> underTest.findClientByEmail(clientRequest.getEmail()));
+
+        String expectedMessage = "User with provided email does not exist.";
+        String actualMessage = exception.getMessage();
+
+        assertTrue(actualMessage.contains(expectedMessage));
+
     }
 
     @Test
@@ -150,13 +166,12 @@ class ClientServiceTest {
         // when
 
         BookingDto bookingDto = underTest.addClientToHotelRoom(bookingRequest);
+        ClientDto clientDto = bookingDto.getClient();
 
         // then
-        assertEquals(booking.getClient().getEmail(), bookingDto.getClient().getEmail());
-
+        assertEquals(booking.getClient().getEmail(), clientDto.getEmail());
+        assertEquals(clientRequest.getEmail(), clientDto.getEmail());
     }
-
-
 
     @Test
     void findClientByEmail() {
@@ -186,11 +201,5 @@ class ClientServiceTest {
         assertEquals(client.getDateOfBirth(), clientTest.getDateOfBirth());
     }
 
-    static Stream<Arguments> findClientByEmailData(){
-        ClientServiceTest clientServiceTest = new ClientServiceTest();
-        return Stream.of(
-                Arguments.of(clientServiceTest.client.getEmail(), true),
-                Arguments.of("notexistingemail@gmail.com", true)
-        );
-    }
+
 }
