@@ -48,7 +48,8 @@ public class HotelService {
                 hotel.getCity(),
                 hotel.getCountry(),
                 hotel.getStars(),
-                hotel.getNumberOfRooms()
+                hotel.getNumberOfRooms(),
+                hotel.getIsAvailableOnSummer()
         );
     }
 
@@ -128,7 +129,8 @@ public class HotelService {
                 hotelRoom.getIsAvailable(),
                 hotelRoom.getNumberOfBeds(),
                 hotelRoom.getHasPrivateToilet(),
-                hotelRoom.getNumberOfClients()
+                hotelRoom.getNumberOfClients(),
+                hotel.getId()
 
         );
 
