@@ -42,8 +42,16 @@ public class HotelRoomDto {
     }
 
 
-    public HotelRoomDto(Long id, Boolean isAvailable) {
-        this.id = id;
+    public HotelRoomDto(Long hotelId, Boolean isAvailable) {
+        this.hotelId = hotelId;
         this.isAvailable = isAvailable;
+    }
+
+    public HotelRoomDto(Boolean isAvailable, Integer numberOfBeds, Boolean hasPrivateToilet, Integer numberOfClients, Long hotelId) {
+        this.isAvailable = isAvailable;
+        this.numberOfBeds = numberOfBeds;
+        this.hasPrivateToilet = hasPrivateToilet;
+        this.numberOfClients = numberOfClients;
+         this.hotelId = hotelId;
     }
 }

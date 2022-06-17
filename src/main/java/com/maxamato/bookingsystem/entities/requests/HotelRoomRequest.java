@@ -11,8 +11,8 @@ import lombok.*;
 public class HotelRoomRequest {
 
     private int numberOfBeds;
-    private final Boolean hasPrivateToilet=false;
-    private final Boolean isAvailable=true;
+    private Boolean hasPrivateToilet;
+    private Boolean isAvailable;
     private Long hotelId;
 
 }

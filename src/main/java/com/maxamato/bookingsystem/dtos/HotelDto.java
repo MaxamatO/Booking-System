@@ -19,6 +19,7 @@ public class HotelDto {
     private Integer stars;
     private Integer numberOfRooms;
     private List<HotelRoomDto> hotelRooms;
+    private Boolean isAvailableOnSummer;
 
     public HotelDto(String hotelName, String city, String country,
                     Integer stars, int numberOfRooms, List<HotelRoomDto> hotelRooms){
@@ -31,12 +32,14 @@ public class HotelDto {
     }
 
     public HotelDto(String hotelName, String city, String country,
-                    Integer stars, int numberOfRooms){
+                    Integer stars, int numberOfRooms,
+                    Boolean isAvailableOnSummer){
         this.hotelName = hotelName;
         this.city = city;
         this.country = country;
         this.stars = stars;
         this.numberOfRooms = numberOfRooms;
+        this.isAvailableOnSummer = isAvailableOnSummer;
     }
 
 

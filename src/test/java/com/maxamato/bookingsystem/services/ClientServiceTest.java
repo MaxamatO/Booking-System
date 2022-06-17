@@ -162,6 +162,8 @@ class ClientServiceTest {
         hotelService.addHotelRoom(
                 new HotelRoomRequest(
                         hotelRoom.getNumberOfBeds(),
+                        hotelRoom.getHasPrivateToilet(),
+                        hotelRoom.getIsAvailable(),
                         hotel.getId()
                 )
         );
@@ -236,6 +238,8 @@ class ClientServiceTest {
         hotelService.addHotelRoom(
                 new HotelRoomRequest(
                         hotelRoom.getNumberOfBeds(),
+                        hotelRoom.getHasPrivateToilet(),
+                        hotelRoom.getIsAvailable(),
                         hotel.getId()
                 )
         );
