@@ -6,6 +6,7 @@ import com.maxamato.bookingsystem.entities.requests.BookingRequest;
 import com.maxamato.bookingsystem.entities.requests.ClientRequest;
 import com.maxamato.bookingsystem.services.ClientService;
 import lombok.AllArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.websocket.server.PathParam;
@@ -17,10 +18,6 @@ import java.util.List;
 public class ClientController {
     private final ClientService clientService;
 
-    @GetMapping(path = "all")
-    public List<ClientDto> findAllClients() {
-        return clientService.findAllClients();
-    }
 
     @GetMapping(path = "{clientId}")
     public ClientDto findClient(@PathParam("email") String email) {
@@ -45,11 +42,6 @@ public class ClientController {
     @PutMapping(path = "/rooms/book")
     public BookingDto addClientToHotelRoom(@RequestBody BookingRequest bookingRequest) {
         return clientService.addClientToHotelRoom(bookingRequest);
-    }
-
-    @DeleteMapping(path = "{clientEmail}/delete")
-    public String deleteClient(@PathVariable String clientEmail) {
-        return clientService.deleteClient(clientEmail);
     }
 
 

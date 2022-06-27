@@ -20,52 +20,37 @@ public class HotelController {
     private final HotelService hotelService;
     // ****** HOTEL PART *******
 
-    @PostMapping(path = "hotel/add")
-    public HotelDto addHotel(@RequestBody HotelRequest hotelRequest){
-        return hotelService.addHotel(hotelRequest);
-    }
 
-    @GetMapping(path = "hotels/all")
+    @GetMapping(path = "view/hotels/all")
     public List<HotelDto> getHotels(){
         return hotelService.getHotels();
     }
 
-    @GetMapping(path = "hotels/from/")
+    @GetMapping(path = "view/hotels/from/")
     public List<HotelDto> getHotelsFrom(@RequestParam(name = "country") String country){
         return hotelService.getHotelsFrom(country);
     }
 
-    @GetMapping(path = "hotels/")
+    @GetMapping(path = "view/hotels/")
     public HotelDto getHotel(@RequestParam(name = "id") Long id){
         return hotelService.getHotel(id);
     }
 
-    @DeleteMapping(path = "hotel/{hotel_id}/delete")
-    public String deleteHotel(@PathVariable(name = "hotel_id") Long id){
-        return hotelService.deleteHotel(id);
-    }
 
     // ****** HOTEL ROOM PART *******
 
-    @PostMapping("hotel/room/add")
-    public HotelRoomDto addHotelRoom(@RequestBody HotelRoomRequest hotelRoomRequest){
-        return hotelService.addHotelRoom(hotelRoomRequest);
 
-    }
 
-    @GetMapping("hotel/room/{roomId}")
+    @GetMapping("view/hotel/room/{roomId}")
     public HotelRoomDto getHotelRoomById(@PathVariable Long roomId){
         return hotelService.getHotelRoomById(roomId);
     }
 
-    @GetMapping("hotel/rooms/all")
+    @GetMapping("view/hotel/rooms/all")
     public List<HotelRoomDto> getAllHotelRooms(){
         return hotelService.getAllHotelRooms();
     }
 
-    @DeleteMapping("hotel/room/{roomId}/delete")
-    public String deleteHotelRoom(@PathVariable Long roomId){
-        return hotelService.deleteHotelRoom(roomId);
-    }
+
 
 }
