@@ -34,10 +34,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/", "index", "/css/*", "/js/*")
                 .permitAll()
-//                .antMatchers("/api/v1/booking_system/view/**").hasAnyRole(CLIENT.name(), ADMIN.name(), HOTELOWNER.name())
                 .anyRequest()
                 .authenticated()
                 .and()
+                .csrf().disable()
                 .httpBasic();
     }
 
