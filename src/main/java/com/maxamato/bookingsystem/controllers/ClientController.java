@@ -14,7 +14,7 @@ import java.util.List;
 
 @AllArgsConstructor
 @RestController
-@RequestMapping(path = "api/v1/booking_system/client")
+@RequestMapping(path = "/view/api/v1/booking_system/client")
 public class ClientController {
     private final ClientService clientService;
 

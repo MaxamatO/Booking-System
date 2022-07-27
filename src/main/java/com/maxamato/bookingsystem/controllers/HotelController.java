@@ -14,24 +14,24 @@ import java.util.List;
 
 @AllArgsConstructor
 @RestController
-@RequestMapping(path = "api/v1/booking_system")
+@RequestMapping(path = "view/api/v1/booking_system")
 public class HotelController {
 
     private final HotelService hotelService;
     // ****** HOTEL PART *******
 
 
-    @GetMapping(path = "view/hotels/all")
+    @GetMapping(path = "hotels/all")
     public List<HotelDto> getHotels(){
         return hotelService.getHotels();
     }
 
-    @GetMapping(path = "view/hotels/from/")
+    @GetMapping(path = "hotels/from/")
     public List<HotelDto> getHotelsFrom(@RequestParam(name = "country") String country){
         return hotelService.getHotelsFrom(country);
     }
 
-    @GetMapping(path = "view/hotels/")
+    @GetMapping(path = "hotels/")
     public HotelDto getHotel(@RequestParam(name = "id") Long id){
         return hotelService.getHotel(id);
     }
@@ -41,12 +41,12 @@ public class HotelController {
 
 
 
-    @GetMapping("view/hotel/room/{roomId}")
+    @GetMapping("hotel/room/{roomId}")
     public HotelRoomDto getHotelRoomById(@PathVariable Long roomId){
         return hotelService.getHotelRoomById(roomId);
     }
 
-    @GetMapping("view/hotel/rooms/all")
+    @GetMapping("hotel/rooms/all")
     public List<HotelRoomDto> getAllHotelRooms(){
         return hotelService.getAllHotelRooms();
     }

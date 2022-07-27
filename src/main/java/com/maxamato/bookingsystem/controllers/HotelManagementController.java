@@ -34,11 +34,13 @@ public class HotelManagementController {
     // ************************* HOTEL ROOM PART *************************
 
     @PostMapping("hotel/room/add")
+    @PreAuthorize("hasAnyRole('ADMIN', 'HOTELOWNER')")
     public HotelRoomDto addHotelRoom(@RequestBody HotelRoomRequest hotelRoomRequest){
         return hotelService.addHotelRoom(hotelRoomRequest);
     }
 
     @DeleteMapping("hotel/room/{roomId}/delete")
+    @PreAuthorize("hasAnyRole('ADMIN', 'HOTELOWNER')")
     public String deleteHotelRoom(@PathVariable Long roomId){
         return hotelService.deleteHotelRoom(roomId);
     }
